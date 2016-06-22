@@ -1,6 +1,6 @@
 <?php 
 //general we use it with middleware
-//composer  cd ..out project
+//composer  cd ..our project
 //packagist.org  we search the mail
 //composer require nette/mail
 //then we use it like this ...
