@@ -180,9 +180,109 @@ vim html/a.php
 pkill -9 php 
 ./sbin/php-fpm 
 再次请求 xx.php,看到如下类似效果,即整合成功
-//编译mysql  http://mirrors.sohu.com/  wget 
-
-
+//编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好
+//mv src/mysql usr/local/mysql
+//cd usr/local/mysql
+				MySQL 的安装稍复杂一些(主要是编译后的配置及初始化),大家注意,碰到开源软件
+				1:官网的安装介绍
+				2: 下载源码后,一般有 README/INSTALL
+				3: ./configure --help
+				我们可以下载 2 进制版本来安装:
+				官方示例:
+				shell> groupadd mysql
+				shell> useradd -r -g mysql mysql
+				shell> cd /usr/local
+				shell> tar zxvf /path/to/mysql-VERSION-OS.tar.gz
+				shell> ln -s full-path-to-mysql-VERSION-OS mysql
+				shell> cd mysql
+				shell> chown -R mysql .
+				shell> chgrp -R mysql .
+				shell> scripts/mysql_install_db --user=mysql # 安装初始化数据
+				shell> chown -R root .
+				shell> chown -R mysql data
+				具体安装流程:
+				# groupadd mysql
+				[root@bogon mysql5.5]# useradd -g mysql mysql
+				[root@bogon mysql5.5]# cd /usr/local/mysql5.5/
+				#chown -R mysql .
+				# chgrp -R mysql .
+				# ./scripts/mysql_install_db --user=mysql
+				如果提示如下错误:
+				/bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or
+				directory
+				则# yum install libaioso.1 libaio
+				然后再次执行
+				# chown -R root .
+				# chown -R mysql data
+				# mkdir /var/run/mysqld
+				# chown mysql /var/run/mysqld
+				# chgrp mysql /var/run/mysqld
+				# ./bin/mysqld_safe --user=mysql &
+				14.3 mysql 连接
+				Mysqld 安装后,连接经常出现找不到 sock 的情况
+				我们用 2 个办法来解决
+				1: 建立软件链接
+				#ln /var/lib/mysql/mysql.sock /tmp/mysql.sock
+				2: 查看 mysql --help
+				Mysql -S /path/to/mysql.sock
+				14.4 mysql 修改密码
+				Mysql 用户的密码,存储在一个系统库里的---mysql
+//编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好
+//mv src/mysql usr/local/mysql
+//cd usr/local/mysql
+//more Install-Binary 
+//more /etc/passwd |grep mysql
+//more /etc/group |grep mysql
+// 查看有无mysql组
+//建组建用户
+groupadd mysql
+useradd -r -g mysql mysql 
+cd local/mysql 
+chown mysql ./ -R 
+chgrp mysql ./ -R 
+./script/mysql_install_db  --user=mysql 
+报错
+./bin/mysqld_safe &
+ps -aux | grep mysql 
+无进程
+看错误日志
+more /var/log/mysqld.log 
+mkdir /var/run/mysqld 
+chown mysql 
+chgrp mysql 
+cd local/mysql 
+ls bin/
+./bin/mysql 
+//启动mysql
+报错无/tmp/mysql.sock
+ps -aux |grep mysql 
+发现sock文件
+ln -s /var/lib/mysql/mysql.sock  /tmp/mysql.sock
+//再启动./bin/mysql
+//连上了
+//另一个方法  ./bin/mysql -s /var/lib/mysql/mysql.sock
+//默认没有密码
+//默认有mysqls数据库 启动mysql
+use mysql 
+show tables //有个user表
+select Host,User,Password from user 
+//mysql 要凭三个身份才能验证用户名Host很重要
+//删多余的 
+delete from user where Host != 'localhost'
+delete from user where user = '';
+//修改密码
+update user set Password = password('123456')
+//因为权限在内存中,所以要刷新内存
+flush privileges;
+exit:
+./bin/mysql -uroot -p 
+////php 连接mysql 
+cd /usr/local/nginx/html 
+vim a.php 
+pdo //链接  php7.0.6 不用mysql_connect 了
+//启动php 启动nginx  /tmp/mysql.sock 有 a.php 打不开,因为没权限
+chmod o+rx /var/lib/mysql/.
+ll /var/lib 使mysql的other有权限   刷新域名链接上了
 
 
 
