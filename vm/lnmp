@@ -118,6 +118,11 @@ cd src
 cd src
 ./configure --prefix=/usr/local/memcache 
 make && make install 
+
+
+
+
+
 //编译lnmp
 //下载http://nginx.org/en/download.html    stable
 //解压   tar -zxvf ......tar.gz
