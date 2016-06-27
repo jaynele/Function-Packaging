@@ -191,6 +191,14 @@ vim html/a.php
 <?php phpinfo();
 //php 的配置文件在/usr/local/php/lib 但查看没有,
 //找/usr/local/src/php/php.ini 有,复制一份到/usr/local/php/lib/  
+报错log日志2014/02/03 09:00:32 [error] 16607#0: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 14.159.131.19, server: foo.com, request: "GET HTTP/1.1", upstream: "fastcgi://127.0.0.1:9000", host: "22.11.180.154"
+改配置文件sudo nano /etc/php5/fpm/pool.d/www.conf
+or if you're the admin 'root'
+nano /etc/php5/fpm/pool.d/www.conf
+Then find this line and uncomment it:
+listen.allowed_clients = 127.0.0.1
+修改为自己ip地址,然后php,nginx都重启
+
 pkill -9 php 
 ./sbin/php-fpm 
 再次请求 xx.php,看到如下类似效果,即整合成功
