@@ -94,7 +94,10 @@ yum info installed
 yum check-update
 yum update 
 //清缓存  
-yum clean 
+yum clean
+
+
+
 //yum 安装 gcc 编译环境,为编译lnmp准备
 yum install gcc automake autoconf libtool gcc-c++
 //源代码编译成二进制要下载源代码,官网复制云代码下载路径
