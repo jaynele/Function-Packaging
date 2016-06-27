@@ -198,7 +198,10 @@ nano /etc/php5/fpm/pool.d/www.conf
 Then find this line and uncomment it:
 listen.allowed_clients = 127.0.0.1
 修改为自己ip地址,然后php,nginx都重启
-
+//当编译并安装好php后，用以下命令启动./sbin/php-fpm
+然后报出这样的错误：cannot get uid
+修改php的配制文件php-fpm.conf (在安装目录的etc子目录下)
+//重启
 pkill -9 php 
 ./sbin/php-fpm 
 再次请求 xx.php,看到如下类似效果,即整合成功
