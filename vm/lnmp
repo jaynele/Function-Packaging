@@ -137,7 +137,10 @@ make && make install
 make && make install 
 ./sbin/nginx 
 Pkill -9 进程名
-Service iptables stop
+service iptables stop
+
+
+
 ////编译php
 //php依赖的库很多 yum install gd zlib openssl openssl-devel libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt libmcrypt-devel
 //官网大陆镜像wget 解压
@@ -163,6 +166,10 @@ yum install libmcrypt-devel
 --enable-fpm
 make &&　make install 
 //window 下,apache-php.dll文件,启动Apache,php也启动
+
+
+
+
 //但nginx与php要整合
 //启动php 配置nginx
 //启动php
@@ -187,6 +194,11 @@ vim html/a.php
 pkill -9 php 
 ./sbin/php-fpm 
 再次请求 xx.php,看到如下类似效果,即整合成功
+
+
+
+
+
 //编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好
 //mv src/mysql usr/local/mysql
 //cd usr/local/mysql
