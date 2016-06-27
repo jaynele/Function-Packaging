@@ -278,8 +278,9 @@ ps -aux | grep mysql
 看错误日志
 more /var/log/mysqld.log 
 mkdir /var/run/mysqld 
-chown mysql 
-chgrp mysql 
+# chown mysql /var/run/mysqld
+# chgrp mysql /var/run/mysqld
+////////# ./bin/mysqld_safe --user=mysql &
 cd local/mysql 
 ls bin/
 ./bin/mysql 
