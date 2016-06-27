@@ -21,7 +21,7 @@ ll
 //-rwxrwxrwx
 //-文件 l 软连接 d 目录
 //读写执行
-make -p dir 
+mkdir -p 
 //移动 改名
 mv 
 //复制
