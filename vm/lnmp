@@ -312,5 +312,6 @@ cd /usr/local/nginx/html
 vim a.php 
 pdo //链接  php7.0.6 不用mysql_connect 了
 //启动php 启动nginx  /tmp/mysql.sock 有 a.php 打不开,因为没权限
+cd php
 chmod o+rx /var/lib/mysql/.
 ll /var/lib 使mysql的other有权限   刷新域名链接上了
