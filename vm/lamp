@@ -15,6 +15,7 @@ php语言
 //远程对linux服务器操作使用第三方工具xshell,用root以外的其他用户操作
 //root新建用户,为用户设密码,设置用户名登录服务器
 //apache
+blogs:http://www.cnblogs.com/zhuque/archive/2012/11/03/2763352.html
 平台：VMware上虚拟的centos
 宿主机：windows
 安装Apache前准备：
