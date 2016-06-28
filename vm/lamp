@@ -83,7 +83,7 @@ php配置
 --with-gd \
 --enable-gd-native-ttf \
 --enable-gd-jis-conv \
---with-mysql-dir=/usr/local/mysql/include/mysql.h \
+--with-mysql=/usr/local/mysql/include/mysql.h \
 --enable-mysqlnd \
 --with-pdo-mysql=mysqlnd 
 //报错--with-mysql 
