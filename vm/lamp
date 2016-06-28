@@ -70,3 +70,6 @@ http://sourceforge.net/projects/pcre/files/latest/download 下载pcre-8.31.zip
 <IfModule dir_module>
     DirectoryIndex index.html index.php
 </IfModule>
+
+
+mysql的配置同lnmp
