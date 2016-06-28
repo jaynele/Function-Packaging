@@ -138,6 +138,7 @@ make && make install
 ./sbin/nginx 
 Pkill -9 进程名
 service iptables stop
+service network restart
 
 
 
