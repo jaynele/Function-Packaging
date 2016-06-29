@@ -78,6 +78,19 @@ $user = 'root';
 $pass = '123456';
 $dbh = new PDO('mysql:host=localhost;dbname=mysql', $user, $pass);
 print_r($dbh);
+1、启动
+　　MySQL安装完成后启动文件mysql在/etc/init.d目录下，在需要启动时运行下面命令即可。
+[root@localhost mysql]#  /etc/init.d/mysql start
+2、停止
+[root@localhost mysql] #  /usr/bin/mysqladmin -u root -p shutdown
+3、自动启动
+
+　　1）察看mysql是否在自动启动列表中　
+[root@localhost mysql] #　/sbin/chkconfig –list
+2）把MySQL添加到你系统的启动服务组里面去
+[root@localhost mysql] #　/sbin/chkconfig　– add　mysql
+3）把MySQL从启动服务组里面删除。　
+[root@localhost mysql] #　/sbin/chkconfig　– del　mysql
 
 
 php配置
