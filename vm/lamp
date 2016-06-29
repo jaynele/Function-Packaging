@@ -73,6 +73,11 @@ http://sourceforge.net/projects/pcre/files/latest/download 下载pcre-8.31.zip
 
 
 mysql的配置同lnmp
+<?php
+$user = 'root';
+$pass = '123456';
+$dbh = new PDO('mysql:host=localhost;dbname=mysql', $user, $pass);
+print_r($dbh);
 
 
 php配置
@@ -102,3 +107,31 @@ yum install libmcrypt-devel
 --enable-fpm
 make &&　make install 
 //window 下,apache-php.dll文件,启动Apache,php也启动
+把配置php.ini，只需要把php-5.3.18安装包中的php.ini-production拷贝到/usr/local/php/lib/下即可。
+[root@localhost php-5.3.18]#cp php.ini-production /usr/local/lib/php.ini
+配置Apache中的PHP环境
+需要修改Apache的配置文件httpd.conf以得到PHP的解析：
+
+1、在LoadModule中添加：LoadModule php5_module     modules/libphp5.so
+
+2、在AddType application/x-gzip .gz .tgz下面添加：
+ # probably should define those extensions to indicate media types:
+    #
+    AddType application/x-compress .Z
+    AddType application/x-gzip .gz .tgz
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
+3、在DirectoryIndex增加 index.php，以便Apache识别PHP格式的index
+<IfModule dir_module>  
+    DirectoryIndex index.html index.php  
+</IfModule> 
+最后一步验证PHP环境：
+
+在Apache网站目录下新建php的phpinfo测试页，/usr/local/apache/htdocs/info.php
+[root@localhost htdocs]# vi info.php
+
+<?php
+
+phpinfo();
+
+?>
