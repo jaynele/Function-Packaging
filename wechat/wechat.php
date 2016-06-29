@@ -50,5 +50,5 @@
 //unzip wx_sample.20140819.zip
 //多出来wx.sample.php
 vim wx.php
-define token
+define token ,
 通过之后,wx.php中的valid()方法就不要了
