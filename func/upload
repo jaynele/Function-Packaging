@@ -1,0 +1,162 @@
+1.php.ini  seach uploads 
+  1.file_uploads = on       支持http上传
+  2.upload_tmp_dir =        临时文件保存的目录
+  3.upload_max_filesize=2m  允许上传文件的最大值
+  4.max_file_uploads=20,    允许一次上传的最大文件数
+  5.post_max_size=8m        post方式发送数据的最大值
+
+  1.max_execution_time = -1 ,设置了脚本被解析器终止之前允许的最大执行时间,单位为秒,放置程序写的不好而战服务器资源
+  2.max_input_time= 60,脚本解析输入数据允许的最大时间,单位十秒
+  3.max_input_nesting_level =64,设置输入变量的嵌套深度
+  4.max_input_vars = 1000,接受多少输入的变量
+  5.memory_limit = 128m 最大单线程的独立内存使用量 
+
+  1.errors
+    0 ok
+    1. upload_max_filesize=2m  允许上传文件的最大值
+    2. max_file_size  
+    3.文件只有部分被上传
+    4.没有文件被上传
+    6.找不到临时文件
+    7.文件写入失败
+    8.上传的文件被php扩展程序中断
+    
+    
+2.
+print_r($_FILES);
+ $tmp_name=$_FILES['PIC']['tmp_name'];
+ $filename = $_FILES['pic']['name'];
+ $destination = 'upload/'.$filename;
+ move_upload_file($tmp_name,$destination);
+ 
+3.<?php
+header('content-type:text/html;charset=utf-8');
+//接收上传文件信息;
+ $fileinfo = $_FILES['pic'];
+ $filename = $fileinfo['name'];
+ $type = $fileinfo['type'];
+ $tmp_name = $fileinfo['tmp_name'];
+ $size = $fileinfo['size'];
+ $error = $fileinfo['error'];
+ //判断上传文件是否成功0或UPLOAD_ERR_OK
+ if($error == UPLOAD_ERR_OK){
+  if(move_uploaded_file($tmp_name,'uploads/'.$filename)){
+    echo '文件'.$filename.'上传成功';
+  }else{
+    echo '文件'.$filename.'上传失败';
+  }
+ }else{
+  //匹配错误信息
+  switch($error){
+    case:1 
+      echo '上传文件超过了PHP配置文件中upload_max_filesize选项的值';
+      break;
+    case:2
+      echo '超过了表单max_file_size的大小';
+      break;
+    case:3
+      echo '文件只有部分被上传';
+      break;
+    case:4
+      echo '没有文件被上传';
+      break;
+    case:6
+      echo '找不到临时文件';
+      break;
+    case:7
+      echo '文件写入失败';
+      break;
+    case:8
+      echo '上传的文件被php扩展程序中断';
+      break;
+  }
+ }
+ 
+ 4.通过客户端限制:但是以下方法对程序猿的限制不起作用,还需要通过服务器端
+ 通过表单隐藏域限制上传文件的最大值
+ <input type='hidden' name='MAX_FILE_SIZE' VALUE='字节数'>
+ 通过accept属性限制上传文件类型
+ <input type='file' name='pic' accept='image/jpeg,image/gif,image/png'>
+5.通过服务器端限制
+  限制上传文件大小
+  限制上传文件类型
+  检测是否为真实图片类型
+  检测是否为HTTP post方式上传
+  <?php
+header('content-type:text/html;charset=utf-8');
+//接收上传文件信息;
+ $fileinfo = $_FILES['pic'];
+ $filename = $fileinfo['name'];
+ $type = $fileinfo['type'];
+ $tmp_name = $fileinfo['tmp_name'];
+ $size = $fileinfo['size'];
+ $error = $fileinfo['error'];
+ $maxsize = 2m = 1024*1024*2=2097152字节;
+ $allowExt=array('jpeg','jpg','png','gif','wbmp');
+ $flag = true;//检测是否为真实的图片类型
+ //判断上传文件是否成功0或UPLOAD_ERR_OK
+ if($error == 0){
+    //判断上传文件大小默认是2m
+    if($size > $maxsize){
+      exit('上传文件大小不符合规范');
+  }
+  //判断文件上传类型
+    $ext= strtolower(end(explode('.',$filename)));
+    if(!in_array($ext,$allowExt)){
+      exit('上传文件类型非法');
+  }
+  //判断文件是否是通过HTTP POST方式上传来的
+    if(!is_uploaded_file($tmp_file)){
+      exit('文件不是通过HTTP POST方式上传来的');
+    }
+  //txt文件修改扩展名为允许类型,上传不为真实图片,判断是否为真实图片
+  if($flag){
+    if(!getimagesize($tmp_name)){
+      exit('不是真正图片类型');
+    }
+  }
+    $path = 'upload';
+    if(!file_exists($path)){
+      mkdir($path,0777,true);
+      chmod($path,0777);
+    }
+    $uniName = md5(uniqid(microtime(true),true)).'.'.$ext;
+    $destination = $path.'/'.$uniName;
+    if(move_uploaded_file($tmp_name,$destination)){
+      echo '文件'.$filename.'上传成功';
+    }else{
+      echo '文件'.$filename.'上传失败';
+    }
+ }else{
+  //匹配错误信息
+  switch($error){
+    case:1 
+      echo '上传文件超过了PHP配置文件中upload_max_filesize选项的值';
+      break;
+    case:2
+      echo '超过了表单max_file_size的大小';
+      break;
+    case:3
+      echo '文件只有部分被上传';
+      break;
+    case:4
+      echo '没有文件被上传';
+      break;
+    case:6
+      echo '找不到临时文件';
+      break;
+    case:7
+      echo '文件写入失败';
+      break;
+    case:8
+      echo '上传的文件被php扩展程序中断';
+      break;
+  }
+ }
+ 
+ 
+ 
+ 6.单文件上传函数的封装
+   
+  
+?>
