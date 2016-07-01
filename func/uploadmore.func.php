@@ -14,6 +14,7 @@ function getfiles(){
 				$files[$i]['tmp_name'] = $file['tmp_name'][$key];
 				$files[$i]['error'] = $file['error'][$key];
 				$files[$i]['size'] = $file['size'][$key];
+				$i++;
 			}
 		}
 	}
@@ -39,11 +40,11 @@ function uniName(){
 
 
 //upload.func.php文件内容如下
-function uploadFile(){
+function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','png','gif','wbmp'),$flag=true,$path = './upload'){
 	//判断错误号
 	if($fileinfo['error'] === UPLOAD_ERR_OK){
 		//检测文件上传大小
-		$maxsize = 2097152
+		//$maxsize = 2097152;
 		if($fileinfo['size']>$maxsize){
 			$res['mes']=$fileinfo['name'].'上传文件过大';
 		}
@@ -51,14 +52,14 @@ function uploadFile(){
 		
 		//检测上传文件类型
 		$ext= strtolower(end(explode('.',$fileinfo['name'])));
-		$allowExt=array('jpeg','jpg','png','gif','wbmp');
+		//$allowExt=array('jpeg','jpg','png','gif','wbmp');
 		if(!in_array($ext,$allowExt)){
 			$res['mes']=$fileinfo['name'].'文件类型不对';
 		}
 		
 		
 		//检测是否为真实图片
-		$flag=true;
+		//$flag=true;
 		if($flag){
 			if(!getimagesize($fileinfo['tmp_name']){
 			$res['mes']=$fileinfo['name'].'不是真实图片类型';
@@ -75,7 +76,7 @@ function uploadFile(){
 		  if($res) return $res;
 		  
 		  
-		 $path = './upload';
+		 //$path = './upload';
 		  if(!file_exists($path)){
 		    mkdir($path,0777,true);
 		    chmod($path,0777);
@@ -139,7 +140,8 @@ function uploadFile(){
   header('Content-type:text/html;charset=utf-8');
   include_once('upload.func.php');
   include_once('common.func.php');
-  foreach($_FILES as $fileinfo){
+  $files = getFiles();
+  foreach($files as $fileinfo){
     $files[]=uploadFile($fileinfo);
   }
 
