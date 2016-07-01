@@ -1,1 +1,60 @@
+//使用url语法传输数据的命令行工具,客户端像服务的请求资源的工具
+//资源:网页资源:编写网页爬虫,webservice天气号码归属地,ftp服务器里面的文件资源
+//所有网络上的资源都可以通过curl来实现
+//php中window,linux使用curl,查看是否支持curl
+win:cmd中php -i     编辑-查找curl
+linux:  php -i | grep cURL
+//如果不支持,添加curl
+http://hi.baidu.com/rj52077/item/4e426eda694b4a52d63aae99
+linux:  http://blog.163.com/sweet_hard/blog/static/666568382011112291327332/
+//使用,初始化,发送接收数据
+curl_init() curl_exec() curl_close()
+1.做网页爬虫
+2.获取天气信息
+3.操作ftp服务器中数据
+4.访问https资源
+
+案例一:
+<?php
+$curl = curl_init('http://www.baidu.com');//初始化
+curl_exec($curl);
+curl_close($curl);
+?>
+cmd
+cd /d  dir
+dir
+php -f 文件名//执行这个文件
+php -f 文件名>baidu.html //重定向到一个文件里
+
+
+案例二:
+用curl抓取网页信息并替换部分内容
+<?php
+$curlobj = curl_init();   //初始化
+curl_setopt($curlobj,CURLOPT_URL,"http://www.baidu.com");   //设置访问网页的url
+curl_setopt($curlobj,CURLOPT_RETURNTRANSFER,true);    //执行之后不直接打印出来
+$output=curl_exec($curlobj);    //执行
+curl_close($curlobj);   //关闭
+echo str_replace('百度','屌丝',$output);
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
