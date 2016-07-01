@@ -98,6 +98,14 @@ $output = curl_exec($curlobj);
 curl_close($curlobj);
 echo $output;
 ?>
+cmd 
+php -f 文件名 > tmp.txt  //查看已经下载下来
+
+
+案例五:从ftp上下载文件到本地
+案例六:从本地上传文件到ftp
+案例七:访问https资源
+
 
 
 
