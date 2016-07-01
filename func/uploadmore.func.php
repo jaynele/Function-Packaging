@@ -160,9 +160,10 @@ function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','p
 <body>
     <form action="" method="post" enctype="multipart/form-data">
         请选择要上传的文件 <input type="file" name="myFile[]">  //myFile的name,type,tmp_name每个属性是数组,$_FILES是个三维数组,要设法依然使其成为二维数组
+        请选择要上传的文件 <input type="file" name="myFile1">
+        请选择要上传的文件 <input type="file" name="myFile2">
         请选择要上传的文件 <input type="file" name="myFile[]">
-        请选择要上传的文件 <input type="file" name="myFile[]">
-        请选择要上传的文件 <input type="file" name="myFile[]">
+        请选择要上传的文件 <input type="file" name="myFile[]" multiple='multiple'>//一次选择多个文件
         提交:<input type="submit" name="" value="上传文件">
     </form>
 </body>
