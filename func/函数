@@ -3,3 +3,4 @@
 3.hexdec — 十六进制转换为十进制
 4.ftp_pwd — 返回当前目录名
 5.ctype_digit — 做纯数字检测
+6.array_filter();
