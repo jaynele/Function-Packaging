@@ -33,34 +33,41 @@
          * @return boolean
         */
         protected function checkError(){
-          if($this->fileinfo['error']>0){
-            switch($this->fileinfo['error']){
-              case 1:
-                $this->error= '上传文件超过了PHP配置文件中upload_max_filesize选项的值';;
-                break;
-              case 2:
-                $this->error= '超过了表单max_file_size的大小';
-                break;
-              case 3:
-                $this->error= '文件只有部分被上传';
-                break;
-              case 4:
-                $this->error='没有文件被上传';
-                break;
-              case 6:
-                $this->error='找不到临时文件';
-                break;
-              case 7:
-                $this->error='文件写入失败';
-                break;
-              case 8:
-                $this->error='上传的文件被php扩展程序中断';
-                break;
-            }
-            return false;
-          }
-          return true;
-        }
+		if(!is_null($this->fileinfo){
+			if($this->fileinfo['error']>0){
+		            switch($this->fileinfo['error']){
+		              case 1:
+		                $this->error= '上传文件超过了PHP配置文件中upload_max_filesize选项的值';;
+		                break;
+		              case 2:
+		                $this->error= '超过了表单max_file_size的大小';
+		                break;
+		              case 3:
+		                $this->error= '文件只有部分被上传';
+		                break;
+		              case 4:
+		                $this->error='没有文件被上传';
+		                break;
+		              case 6:
+		                $this->error='找不到临时文件';
+		                break;
+		              case 7:
+		                $this->error='文件写入失败';
+		                break;
+		              case 8:
+		                $this->error='上传的文件被php扩展程序中断';
+		                break;
+		            }
+		            return false;
+		          }else{
+		          	 return true;	
+		          }	
+		}else{
+			$this->error='文件上传出错';
+			return false;
+		}
+          
+         }
         /**
          * 检测文件大小
          * 
@@ -171,3 +178,41 @@
         }
     }
 ?>
+
+<?php
+  header('Content-type:text/html;charset=utf-8');
+  include_once('upload.class.php');
+  $upload = new upload();
+  $dest = $upload->uploadFile('pic','uploadsss');//函数里面传参数
+  var_dump($dest);
+  
+  $files = getFiles();
+  foreach($files as $fileinfo){
+    $res=uploadFile($fileinfo);
+    echo $res['mes'],'<br />';
+    $uploadFiles[]=$res['dest'];
+  }
+  $uploadFiles=array_values(array_filter($uploadFiles));
+  print_r($uploadFiles);
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        请选择要上传的文件 <input type="file" name="myFile[]">  //myFile的name,type,tmp_name每个属性是数组,$_FILES是个三维数组,要设法依然使其成为二维数组
+        请选择要上传的文件 <input type="file" name="myFile1">
+        请选择要上传的文件 <input type="file" name="myFile2">
+        请选择要上传的文件 <input type="file" name="myFile[]">
+        请选择要上传的文件 <input type="file" name="myFile[]" multiple='multiple'>//一次选择多个文件
+        提交:<input type="submit" name="" value="上传文件">
+    </form>
+</body>
+</html>
