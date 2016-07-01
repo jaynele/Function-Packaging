@@ -14,7 +14,7 @@ curl_init() curl_exec() curl_close()
 3.操作ftp服务器中数据
 4.访问https资源
 
-案例一:
+案例一:get 方式
 <?php
 $curl = curl_init('http://www.baidu.com');//初始化
 curl_exec($curl);
@@ -27,7 +27,7 @@ php -f 文件名//执行这个文件
 php -f 文件名>baidu.html //重定向到一个文件里
 
 
-案例二:
+案例二:get 方式
 用curl抓取网页信息并替换部分内容
 <?php
 $curlobj = curl_init();   //初始化
@@ -37,6 +37,76 @@ $output=curl_exec($curlobj);    //执行
 curl_close($curlobj);   //关闭
 echo str_replace('百度','屌丝',$output);
 ?>
+cmd
+cls  //清楚屏幕
+php -f 文件名  >baidu1.html  //查看已经替换
+
+
+案例三:post方式
+用curl调用webserver获取天气信息
+$data = 'theCityName=北京';
+$curlobj = curl_init();   //初始化
+curl_setopt($curlobj,CURLOPT_URL,"http://www.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName");   //设置访问网页的url
+curl_setopt($curlobj,CURLOPT_HEADER,0);    //执行之后不直接打印出来
+curl_setopt($curlobj,CURLOPT_RETURNTRANSFER,1);    //执行之后不直接打印出来
+curl_setopt($curlobj,CURLOPT_POST,1);    //执行之后不直接打印出来
+curl_setopt($curlobj,CURLOPT_POSTFIELDS,$data);    //执行之后不直接打印出来
+curl_setopt($curlobj,CURLOPT_HTTPHEADER,array("application/x-www-form-urlencodedd;
+  charset=utf-8",
+  "Content-length:".strlen($data);
+"));    //执行之后不直接打印出来
+$rtn = curl_exec($curlobj);
+if(!curl_errno($curlobj)){
+  echo $rtn;
+}else{
+  echo 'curl error:' . curl_error($curlobj);
+}
+curl_close($curlobj);
+?>
+cmd
+php -f webservice12.php > ws2.txt  //查看txt文件,得到天气信息
+
+
+
+
+
+案例四:使用curl登录实现下载页面,登录才能下载
+<?php
+$data = 'username=demo_peter@126.com&password=123qwe&remember=1';
+$curlobj = curl_init();   //初始化
+curl_setopt($curlobj,CURLOPT_URL,"http://www.imooc.com/user/login");
+curl_setopt($curlobj,CURLOPT_RETURNTRANSFER,true); 
+data_default_timezone_set('PRC');//使用cookie时必须先设置时区
+curl_setopt($curlobj,CURLOPT_COOKIESESSION,true);
+curl_setopt($curlobj,CURLOPT_COOKIEFILE,'cookiefile');
+curl_setopt($curlobj,CURLOPT_COOKIEJAR,'cookiefile');
+curl_setopt($curlobj,CURLOPT_COOKIE,session_name().'='.session_id());
+curl_setopt($curlobj,CURLOPT_HEADER,0);
+curl_setopt($curlobj,CURLOPT_FOLLOWLOCATION,1);  //让curl支持页面链接跳转
+curl_setopt($curlobj,CURLOPT_POST,1);    //执行之后不直接打印出来
+curl_setopt($curlobj,CURLOPT_POSTFIELDS,$data);
+curl_setopt($curlobj,CURLOPT_HTTPHEADER,array("application/x-www-form-urlencodedd;
+  charset=utf-8",
+  "Content-length:".strlen($data);
+")); 
+$rtn = curl_exec($curlobj);
+curl_setopt($curlobj,CURLOPT_URL,"http://www.imooc.com/space/index");
+curl_setopt($curlobj,CURLOPT_POST,0);
+curl_setopt($curlobj,CURLOPT_HTTPHEADER,array("Content-type:text/xml
+"));
+$output = curl_exec($curlobj);
+curl_close($curlobj);
+echo $output;
+?>
+
+
+
+
+
+
+
+
+
 
 
 
