@@ -1,4 +1,5 @@
 <?php
+//common.func.php文件内容如下
 //获取文件信息
 function getfiles(){
 	$i = 0;
@@ -37,7 +38,7 @@ function uniName(){
 }
 
 
-
+//upload.func.php文件内容如下
 function uploadFile(){
 	//判断错误号
 	if($fileinfo['error'] === UPLOAD_ERR_OK){
@@ -89,6 +90,7 @@ function uploadFile(){
 		if(!@move_uploaded_file($fileinfo['tmp_name'],$destination)){
 			 $res['mes']=$fileinfo['name'].'文件移动失败';
       		}
+      		$res['mes']='文件上传成功';
       		$res['dest']=$destination;
       		return $res;
 		
@@ -136,11 +138,14 @@ function uploadFile(){
 <?php
   header('Content-type:text/html;charset=utf-8');
   include_once('upload.func.php');
+  include_once('common.func.php');
   foreach($_FILES as $fileinfo){
     $files[]=uploadFile($fileinfo);
   }
 
 ?>
+
+//模板文件内容如下
 <!DOCTYPE html>
 <html>
 <head>
