@@ -51,7 +51,7 @@ function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','p
 		
 		
 		//检测上传文件类型
-		$ext= strtolower(end(explode('.',$fileinfo['name'])));
+		$ext= getExt($fileinfo['name']);
 		//$allowExt=array('jpeg','jpg','png','gif','wbmp');
 		if(!in_array($ext,$allowExt)){
 			$res['mes']=$fileinfo['name'].'文件类型不对';
@@ -82,7 +82,7 @@ function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','p
 		    chmod($path,0777);
 		  }
 		  
-		  $ext=getExt();
+		  $ext=getExt($fileinfo['name']);
 		  
 		  $uniName=uniName();
 		  
@@ -100,25 +100,25 @@ function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','p
 		//匹配错误信息
 		switch($fileinfo['error']){
 		      case:1 
-		        $meg =  '上传文件超过了PHP配置文件中upload_max_filesize选项的值';
+		        $res['mes'] =  '上传文件超过了PHP配置文件中upload_max_filesize选项的值';
 		        break;
 		      case:2
-		        $meg = '超过了表单max_file_size的大小';
+		        $res['mes'] = '超过了表单max_file_size的大小';
 		        break;
 		      case:3
-		        $meg =  '文件只有部分被上传';
+		        $res['mes'] =  '文件只有部分被上传';
 		        break;
 		      case:4
-		        $meg =  '没有文件被上传';
+		        $res['mes']=  '没有文件被上传';
 		        break;
 		      case:6
-		        $meg =  '找不到临时文件';
+		        $res['mes'] =  '找不到临时文件';
 		        break;
 		      case:7
-		        $meg =  '文件写入失败';
+		        $res['mes']=  '文件写入失败';
 		        break;
 		      case:8
-		        $meg =  '上传的文件被php扩展程序中断';
+		        $res['mes'] =  '上传的文件被php扩展程序中断';
 		        break;
 		 }
 	}
@@ -142,8 +142,12 @@ function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','p
   include_once('common.func.php');
   $files = getFiles();
   foreach($files as $fileinfo){
-    $files[]=uploadFile($fileinfo);
+    $res=uploadFile($fileinfo);
+    echo $res['mes'],'<br />';
+    $uploadFiles[]=$res['dest'];
   }
+  $uploadFiles=array_values(array_filter($uploadFiles));
+  print_r($uploadFiles);
 
 ?>
 
