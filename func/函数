@@ -156,4 +156,7 @@ fopen(),fgetcsv(),
 ◾timezone_transitions_get — 别名 DateTimeZone::getTransitions
 ◾timezone_version_get — Gets the version of the timezonedb
 
+opendir
+readdir
+closedir
 
