@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	*{margin:0;padding:0}
+	.left{float: left;}
+	.right{float: right;}
+	.aside{width: 200px;height: 200px;background: #abcabc;}
+	.main{background: #abcdef}
+	.clear:after{
+		content: '.';
+		display: block;
+		overflow: hidden;
+		visibility: hidden;
+		height: 0;
+		clear:both;
+	}
+	</style>
+</head>
+<body>
+	<div class="main clear">
+		<div class="left aside"></div>
+		<div class="right aside"></div>
+	</div>
+</body>
+</html>
