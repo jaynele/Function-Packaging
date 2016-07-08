@@ -1,0 +1,22 @@
+1.<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+</head>
+<body>
+ <input type="text" id="list" list="ilist"/>
+<datalist id="ilist">
+	<option label="a" value="a">
+	<option label="b" value="b">
+	<option label="c" value="c">
+</datalist>
+</body>
+
+
+<script src="jquery.js"></script>
+<script src="bootstrap.min.js"></script>
+</html>
+
