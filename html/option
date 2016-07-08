@@ -20,3 +20,194 @@
 <script src="bootstrap.min.js"></script>
 </html>
 
+
+2<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>label标签</title>
+</head>
+<body>
+	<label for="male">Male</label>
+	<input type="radio" name="sex" id="male">
+	<label for="famale">Female</label>
+	<input type="radio" name="sex" id="famale">
+</body>
+</html>
+
+3.<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jiuying</title>
+	<link rel="stylesheet" href="./02.css">
+</head>
+<body>
+	<div id="main">
+		<div class="tal">
+			<form action="#" method="post">
+				<h3>用户登录</h3>
+				<ul>
+					<li>
+						<input type="text" id="username" class="user" placeholder="输入邮箱/手机/用户名">
+						<label for="username" id="user_l"></label>
+					</li>
+					<li>
+						<input type="password" id="password" class="pass" placeholder="请输入密码">
+						<label for="password" id="pass_lab"></label>
+					</li>
+					<li class="clear">
+						<input type="text" id="num_code" class="code" placeholder="请输入验证码">
+						<label for="num_code" id="code_lab"></label>
+						<span class="num_img">
+							<img src="./img/num.png" alt="">
+						</span>
+					</li>
+					<li>
+						<input type="submit" value="提 交" class="sub">
+					</li>
+				</ul>
+			</form>
+			<p class="finance-info">北京玖盈财富投资管理有限公司<br />
+				版权所有 Copyright&copy;2015 All Right Reserved
+			</p>
+		</div>
+	</div>
+</body>
+</html>
+
+
+
+blockquote,body,button,dd,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,input,legend
+,li,ol,p,pre,td,textarea,th,ul{margin:0;padding:0}
+body,button,input,select,
+textarea{font:12px/1.5 tahoma,arial,'Hiragino Sans GB',\5b8b\4f53,sans-serif}
+h1,h2,h3,h4,h5,h6{font-size:100%}address,cite,dfn,em,var{font-style:normal}
+code,kbd,pre,samp{font-family:courier new,courier,monospace}
+small{font-size:12px}ol,ul{list-style:none}a{text-decoration:none}
+a:hover{text-decoration:underline}sup{vertical-align:text-top}
+sub{vertical-align:text-bottom}legend{color:#000}fieldset,img{border:0}
+button,input,select,textarea{font-size:100%}
+table{border-collapse:collapse;border-spacing:0}
+*{
+	margin:0;
+	padding:0;
+}
+html,body{
+	height: 100%;
+	font-family: \5FAE\8F6F\96C5\9ED1,\5b8b\4f53,sans-serif;
+	color: #333;
+}
+#main{
+	width: 100%;
+	min-width: 1000px;
+	height: 600px;
+	background: url(./img/finance-bg.jpg) no-repeat center;
+	position: relative;
+	top:50%;
+	margin-top:-300px;
+}
+.tal{
+	width: 360px;
+	height: 460px;
+	background: url(./img/login-bg.png) repeat-y;
+	padding:10px 30px;
+	position: absolute;
+	top:60px;
+	right:25%;
+}
+h3{
+	width: 360px;
+	height: 44px;
+	font-size:26px;
+	line-height: 44px;
+	text-align: center;
+	margin-top: 10px;
+	font-weight: normal;
+}	
+ul{
+	list-style: none;
+}
+li{
+	margin-top: 20px;
+	position:relative;
+}
+.user,.pass{
+	width: 292px;
+	padding:16px 10px 16px 56px;
+	border:1px solid #999;
+	background: #fff;
+	height: 18px;
+	line-height: 18px;
+	font-size: 18px;
+}
+#user_l,#pass_lab{
+	background-image: url(./img/user.png);
+	background-repeat: no-repeat;
+	padding:16px 0 16px 58px;
+}
+#user_l{
+	background-position: 0px 0px;
+}
+form label{
+	position: absolute;
+	top:1px;
+	left: 1px;
+	height: 18px;
+	line-height: 18px;
+	font-size: 18px;
+	color: #c8c8c8;
+	cursor:pointer;
+	z-index: 2;
+}
+#pass_lab{
+	background-position: 0px -70px;
+}
+.code{
+	width: 150px;
+	padding:16px 10px;
+	float: left;
+	border:1px solid #999;
+	background: #fff;
+	height: 18px;
+	line-height: 18px;
+	font-size: 18px;
+}
+#code_lab{
+	padding:16px 0px 16px 12px;
+}
+span{
+	float: right;
+	width: 170px;
+	height: 50px;
+	padding:1px 0;
+	cursor:pointer;
+}
+.clear::after{
+	content:'.';
+	height: 0px;
+	display: block;
+	clear: both;
+	overflow: hidden;
+	visibility: hidden;
+}
+.sub{
+	width: 300px;
+	height: 57px;
+	line-height: 50px;
+	background:url(./img/sub-bg.png) no-repeat center;
+	color: #fff;
+	outline: none;
+	cursor: pointer;
+	font-size: 24px;
+	display: block;
+	margin:0 auto;
+	border:none;
+}
+.finance-info{
+	position: absolute;
+	bottom:14px;
+	left: 30px;
+	color: #fff;
+	line-height: 20px;
+}
