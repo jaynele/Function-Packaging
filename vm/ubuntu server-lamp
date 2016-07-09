@@ -2,4 +2,5 @@
 linux,php搭配优先选择apache,负载均衡选择nginx.     oracle,db2,比较贵,sqlite通讯录等小型用
 mysql开源免费,数据库设计合理,配合集群,几千万数据也都比较轻松,php弱类型语言,兼容linux很好
 用户输入网址,dns找到服务器地址,来到apache这里,apache有很多可扩展的模块libphp5.so找到php解析器干活,将浏览器请求的代码交给php解析器,php解析器
-也有很多可扩展的模块,其中mysql.so会指挥mysql工作
+也有很多可扩展的模块,其中mysql.so会指挥mysql工作通过curd操作,php将处理数据返回给apache,给浏览器
+vmware安装ubuntu 12.4并启动
