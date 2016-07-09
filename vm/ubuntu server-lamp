@@ -87,8 +87,15 @@ sudo tasksel install lamp-server
 
 
 
-//装完了,安装mysql测试环境phpinfo();
+//装完了,安装php,mysql测试环境phpinfo();  pdo
 apache2根目录是在var/www下面
 cd /var/www/html
+sudo apt-get install vim
 sudo vim info.php
+
+//给php添加常用扩展gd curl
+sudo apt-get install php5-gd curl libcurl3 libcurl3-dev php5-curl
+//安装完扩展后需要重启apache2
+sudo service apache2 restart 
+//info.php  phpinfo(); 检测扩展库是否正常加载
 
