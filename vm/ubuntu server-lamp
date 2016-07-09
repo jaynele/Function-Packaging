@@ -57,3 +57,38 @@ pwd
 sudo passwd root  //为root设置密码,
 su - root  //彻底切换到root用户下
 sudo apt-get update  //更新软件源列表
+apt-get会把依赖包一起安装了,比较好使
+//安装apache2
+sudo apt-get install apache2
+apache2 -v
+//访问服务器ip  it works
+//安装php5
+sudo apt-get install php5
+php5 -v
+//查看apache2加载的扩展libphp5.so
+cat /etc/apache2/mods-enabled/php5.load
+//安装mysql
+sudo apt-get install mysql-server
+//查看mysql.so扩展是否加载
+cat /etc/php5/conf.d/mysql.ini
+//没有加载这个扩展,php在安装时默认不安装mysql.so这个扩展,这里手动来安装
+sudo apt-get install php5-mysql   
+//再次查看mysql.so扩展是否加载
+cat /etc/php5/mods-available/mysql.ini
+//加载完扩展后我们要重启mysql
+sudo service mysql restart
+//加载完扩展后也要重启apache2
+
+
+//我们一条命令就可以把整套apache2 php5 mysql-server php5-mysql
+sudo apt-get install apache2 php5 mysql-server php5-mysql
+//我们也可以这样一条命令来安装  
+sudo tasksel install lamp-server
+
+
+
+//装完了,安装mysql测试环境phpinfo();
+apache2根目录是在var/www下面
+cd /var/www/html
+sudo vim info.php
+
