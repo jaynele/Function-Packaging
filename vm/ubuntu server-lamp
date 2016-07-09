@@ -99,3 +99,7 @@ sudo apt-get install php5-gd curl libcurl3 libcurl3-dev php5-curl
 sudo service apache2 restart 
 //info.php  phpinfo(); 检测扩展库是否正常加载
 
+//通过ssh管理服务器文件,ssh远程操作服务器,还可以上传下载服务器上的文件,与ftp类似,相当于sftp
+//开发系统时候,都是在本地电脑上,当系统开发测试完毕后,需要把这些文件传到服务器对应的目录, 即上线,这方面工具很多
+//这里使用filezilla,支持多线程传输,站点管理器,连接主机,可以下载/var/www/html目录下的项目文件
+
