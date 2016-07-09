@@ -49,3 +49,11 @@ touch /var/lock/subsys/local
 chkconfig --add httpd 
 chkconfig httpd on 
 命令即设置好了开机启动。
+
+
+命令:
+pwd
+/home/个人文件夹  ~    其他则为实际路径
+sudo passwd root  //为root设置密码,
+su - root  //彻底切换到root用户下
+sudo apt-get update  //更新软件源列表
