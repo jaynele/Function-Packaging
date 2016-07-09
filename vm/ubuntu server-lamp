@@ -5,6 +5,8 @@ mysql开源免费,数据库设计合理,配合集群,几千万数据也都比较
 也有很多可扩展的模块,其中mysql.so会指挥mysql工作通过curd操作,php将处理数据返回给apache,给浏览器
 vmware安装ubuntu 12.4并启动
 
+图形界面ctrl+alt+f2   ctrl+alt+f7 命令行界面换
+
 昨天在VMware Player中安装了ubuntu系统，今天想通过xshell连接ubuntu，结果显示 
 Connecting to 10.7.100.182:22... 
 Could not connect to '10.7.100.182' (port 22): Connection failed. 
