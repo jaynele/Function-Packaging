@@ -14,7 +14,7 @@ VM中网络连接设置了Bridge模式。
 
 网络查找解决办法如下： 
 xshell连接不了ubuntu，原因没有安装openssh-server，解决方法： 
-
+取消自动更新
 $:sudo apt-get install openssh-server 
 
 查看server是否启动： 
