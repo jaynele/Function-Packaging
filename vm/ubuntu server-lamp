@@ -103,3 +103,59 @@ sudo service apache2 restart
 //开发系统时候,都是在本地电脑上,当系统开发测试完毕后,需要把这些文件传到服务器对应的目录, 即上线,这方面工具很多
 //这里使用filezilla,支持多线程传输,站点管理器,连接主机,可以下载/var/www/html目录下的项目文件
 //html下面的文件要有权限的问题
+
+
+
+
+//apt-get到软件配置文件目录都在/etc  
+apache在/etc/apache2 
+mysql在/etc/mysql
+php在/etc/php5
+
+
+
+
+//查看apache配置文件
+cd /etc/apache2
+ll
+//看到modes setes文件,配置文件先加载apache.conf  这个配置文件又includeports.conf,modes,setes等配置文件
+//apache核心配置文件中modes模块,sites虚拟主机,availed可使用的,enabled已启用的,enabled中建立availeable的软连接
+cd modes-available/
+ls
+cd ..
+cd mods-enabled
+ls
+
+
+//查看mysql的核心配置文件my.cnf,php的核心配置文件php.ini
+cd /etc/mysql/my.cnf
+cd /etc/php5/apache2/php.ini
+
+
+//做三个系统,分别配置三个二级域名,filesysterm中建立三个目录分别存放这三个系统的项目文件,配置DNS,把这三个二级域名都解析到这个服务器上,
+//也就是三个二级域名都同时指向同一个服务器ip  ,让apache来区分用户是通过那个域名来访问apache服务器,访问对应项目所在的目录
+//配置三台虚拟主机 手动配置DNS,Virturl host改host文件,让三个域名都指向ubuntu虚拟主机的服务器,修改host文件模拟DNS解析
+//打开系统的host文件,mac,linux的host文件位置相同,都是基于unix,内核相同
+//host修改后默认是/var/www/html/这个是项目路径
+
+
+//通过终端工具操作服务器创建目录
+//为三个域名三个不同的项目,三个不同的目录
+cd /var/www/html
+sudo mkdir -p wwwroot/{video,bbs,oa}
+cd video
+sudo vim index.html
+cd ssb
+sudo vim index.html
+cd oa
+sudo vim index.html
+
+
+//在apache中配置虚拟主机,进入虚拟主机可用配置文件目录/etc/apache2/sites-available
+cd /etc/apache2/sites-available
+ls
+cat default
+//不修改默认配置的documentroot,而是另外配置三个路径的虚拟主机
+sudo cp 000-default.conf video
+sudo cp 000-default.conf ssb
+sudo cp 000-default.conf oa
