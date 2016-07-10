@@ -188,3 +188,37 @@ su
 cp -av /var/lib/mysql/* /mysqldata/
 //切换账户
 exit   
+//修改mysql的配置文件my.conf
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+datadir   =  /mysqldata
+//关于mysql限制的修改
+sudo vim /etc/apparmor.d/usr.sbin.mysqld
+//注释掉  /var/lib/mysql 的两行权限说明
+/mysqldata/ r,
+  /mysqldata/** rwk,
+//接下来就启动apparmor  启动mysql
+sudo service apparmor reload
+sudo service mysql start
+//建立一个数据库,就会同时生成同名的文件夹,以此检测数据迁移是否成功
+mysql -u root -p
+create database test;
+show databases;
+exit;
+su
+cd /mysqldata
+ll
+//查看建库自动生成的同名文件夹,发现存在,则可以将原来存储目录的数据全部删除
+rm -rvf /var/lib/mysql/
+//切换回账户,迁移完毕
+exit
+
+
+//安装phpmyadmin这是非常流行的mysql管理工具
+//两种安装方法
+1.  apt-get   方法:两条命令
+sudo apt-get install phpmyadmin
+sudo ln -s /usr/share/phpmyadmin /var/www/pma 
+2.  手动上传方式 //网上下载一个程序包,通过ftp方式上传到服务器
+/var/www/html 下创建目录pma
+
+
