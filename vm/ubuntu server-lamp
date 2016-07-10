@@ -159,3 +159,14 @@ cat default
 sudo cp 000-default.conf video
 sudo cp 000-default.conf ssb
 sudo cp 000-default.conf oa
+
+sudo vim video
+ServerName video.ubuntu.com
+DocumentRoot var/www/html/wwwroot/video
+directory /wwwroot/video
+//其他两个类似
+//在/etc/apache2/sites-enabled中建立软连接指向site-available中配置文件
+cd ../enabled
+sudo ln -s ../sites-available/video video
+//其他两个类似
+sudo service apache2 restart
