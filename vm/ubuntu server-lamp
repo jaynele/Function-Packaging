@@ -170,3 +170,21 @@ cd ../enabled
 sudo ln -s ../sites-available/video video
 //其他两个类似
 sudo service apache2 restart
+
+
+//mysql数据存储目录的迁移,例如数据库数据多了,导致磁盘空间不足
+//数据迁移之前要停止mysql的服务
+sudo service mysql stop
+//准备迁移的目标文件夹,默认的mysql的存储目录是在/var/lib/
+cd /var/lib
+ll
+//查看到mysql的权限是700,除了mysql用户外,其他人无法操作mysql,所以这里要修改权限,迁移的目标文件一般都是新挂载的硬盘的
+sudo mkdir -p /mysqldata
+sudo chown -vR mysql:mysql /mysqldata/
+sudo chmod -vR 700 /mysqldata/
+//至此目标文件夹已准备好,并且权限跟用户组都已设置好
+//700是只能root来操作,所以要切换账户
+su
+cp -av /var/lib/mysql/* /mysqldata/
+//切换账户
+exit   
