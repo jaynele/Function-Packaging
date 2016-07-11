@@ -220,5 +220,17 @@ sudo apt-get install phpmyadmin
 sudo ln -s /usr/share/phpmyadmin /var/www/pma 
 2.  手动上传方式 //网上下载一个程序包,通过ftp方式上传到服务器
 /var/www/html 下创建目录pma
+本地下载的phpmyadmin安装包解压将里面的文件全部拽到/var/www/html/pma目录中这样就上传到服务器中了
+浏览器中访问ip/pma,看到界面就是安装成功了
+//考虑其他方式,如给phpmyadmin配置一个虚拟主机以及一个二级域名来部署也可以也更好
+
+
+mysql remote access
+//默认情况下mysql是允许主机访问的,而通过域名远程访问则是remote access
+//在远程的机器上安装数据库管理工具,来远程管理mysql,如navicat远程管理数据,默认不允许远程,这里需要修改配置
+sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+//注释掉bind-address 这样就不是只能这个ip来访问了,其他ip也能访问
+#bind-address 
+//pma 打开phpmyadmin在浏览器中,查看用户列表,这里是对用户而言,而bind-address是对服务器而言的,添加用户
 
 
