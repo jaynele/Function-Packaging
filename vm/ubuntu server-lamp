@@ -156,9 +156,9 @@ cd /etc/apache2/sites-available
 ls
 cat default
 //不修改默认配置的documentroot,而是另外配置三个路径的虚拟主机
-sudo cp 000-default.conf video
-sudo cp 000-default.conf ssb
-sudo cp 000-default.conf oa
+sudo cp 000-default.conf video.conf
+sudo cp 000-default.conf ssb.conf
+sudo cp 000-default.conf oa.conf
 
 sudo vim video
 ServerName video.ubuntu.com
@@ -167,7 +167,7 @@ directory /wwwroot/video
 //其他两个类似
 //在/etc/apache2/sites-enabled中建立软连接指向site-available中配置文件
 cd ../enabled
-sudo ln -s ../sites-available/video video
+sudo ln -s ../sites-available/video.conf video
 //其他两个类似
 sudo service apache2 restart
 
@@ -232,5 +232,17 @@ sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
 //注释掉bind-address 这样就不是只能这个ip来访问了,其他ip也能访问
 #bind-address 
 //pma 打开phpmyadmin在浏览器中,查看用户列表,这里是对用户而言,而bind-address是对服务器而言的,添加用户
+sudo service mysql restart
+//这时通过navicat工具可以作远程连接
+
+
+//服务器集群概念,初级集群架构,手上有很多台服务器,一台负载聚恒nginx,三台装有apache,php,一台负责写入的mysql服务器,三台负责读取的服务器,
+//这些服务器组成集群,这时一大波用户请求,先到负载均衡nginx,通过算法随机等,把请求分发给apache服务器,对用户来说他们访问的数据是完全一样的,
+//php执行一定的业务逻辑后,将数据写入数据库,这台写入的数据库会自动同步到另外三台负责读取的服务器,如果php逻辑是读取数据,则从三台负责读取
+//的服务器中读取数据,当然大型的项目还有索引服务器,缓存服务器,中间件服务器
+//国内外巨型服务器集群,百度ttc,阿里tfs,腾讯bae,新浪sae,谷歌gfs
+
+
+
 
 
