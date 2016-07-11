@@ -19,7 +19,9 @@ install帮助我们配置SDK参数的小工具,配置完成后就可以删除ins
 
 把connect2.1文件夹放到本地配置的目录下,设置配置项,填写appid,appkey,callback.php 回调地址http://test...callback.php
 配置成功,整理文件夹,只留API文件夹,整理connect2.1下只剩整理后的API文件夹下的东西
-//看开发文档,oauth开发指引,开发攻略Server-side
+//看开发文档,oauth开发指引,开发攻略Server-side,运行在server的语言就是server-side,运行在浏览器等客户端client-side就是客户端语言,oauth
+支持各种语言
+用到的核心类和主要方法,三个核心类:
 
 
 
