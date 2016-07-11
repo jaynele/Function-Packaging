@@ -1,4 +1,24 @@
 http://blog.csdn.net/hel12he/article/details/46820711   学习blog
 qq,前提条件,外网可以访问的服务器,
 connect.qq.com  qq互联平台自己qq号码登录一下,进管理中心,填写开发者注册信息
-创建应用,网站,弹出表单
+创建应用,网站,弹出表单,网址填好,然后网站的首页index.html中添加header的验证标签,网站刷新运行,再次验证通过后创建应用
+获得appid,appkey
+本地 二级域名配置好,localhost就可以 test
+connect.qq.com 信息编辑 编写多个回调地址 http://test
+回调地址精确到php页面,来处理开放平台返回过来的coder,所以http://test../callback.php  
+在本地添加callback.php文件 就可以添加逻辑代码接受coder参数了,再次验证,保存
+
+echo '$_GET['code']; 至此,本地的开发环境已经准备完毕
+下面引入官方SDK
+点击qq互联->文档资料->SDK及资源下载,找到php-SDK并下载,//SDK文档自己可以编写,目录结构什么的在实际开发中官方文档不实用后面讲优化
+下载解压,API是接入的核心类及配置文件,最终我们也是使用这个文件夹API,
+doc是开发帮助文档,
+example是接入qq互联后用API开发的一些实例,
+install帮助我们配置SDK参数的小工具,配置完成后就可以删除install这个文件夹了
+
+
+把connect2.1文件夹放到本地配置的目录下,设置配置项,填写appid,appkey,callback.php 回调地址http://test...callback.php
+
+
+
+
