@@ -21,7 +21,34 @@ install帮助我们配置SDK参数的小工具,配置完成后就可以删除ins
 配置成功,整理文件夹,只留API文件夹,整理connect2.1下只剩整理后的API文件夹下的东西
 //看开发文档,oauth开发指引,开发攻略Server-side,运行在server的语言就是server-side,运行在浏览器等客户端client-side就是客户端语言,oauth
 支持各种语言
-用到的核心类和主要方法,三个核心类:
+用到的核心类和主要方法,三个核心类:recorder:专门读取写入session,curl库的get,post,请求,这两个类为认证提供了辅助工具,oauth类是url参数拼接
+
+
+进入开发
+SDK发布很久需要优化,调整文件目录config.php的文件替换到入口文件中,删除空config.php文件,删除utils.php文件,recorder类文件用的inc.php也是可以删的,,comm文件夹这时候就可以删了json_encode()格式的转变,批量替换常见常量名,ROOT,CLASS_ROOT,整个SDK已部署好
+
+项目中写function debug()函数文件,qq.login.php文件,载入debug文件,载入qq入口文件,访问扣扣登录页面,实例化,网址登录,成功
+
+扣扣登录中时
+oauth类中调试$keysarr;用debug调试浏览器中获取的kesarr中的值
+url类中调试$keystr,用debug调试浏览器获取其真实值,发现地址中是keysarr中的值用&拼接成的
+
+扣扣登录后
+返回回调地址callback.php有code,用$_GET['code']查看,重新login并用申请appid的那个扣扣号登录,项目没有上线只能用这个号码,跳转回调地址,用这个code拼接url请求accesstoken,在callback页面实例化,并用qq_callback()函数,用debug调试接收的accesstoken值,coder访问错误的时候出现
+了错误,code有失效限制,需要重新登录一次,就能获取到token值token值跟code值不一样,debug()调试qq_callback()中keysarr,调试params;返回有过期时间,还有reflesh_token,这个可以换取新的access_token值
+
+openId
+就像每个用户的身份证,这是让第三方企业无法获取腾讯用户qq账号,所以第三方只是需要这个openid就可以,判断是否是第一次登陆我们的站点,如果是第一次登陆,我们就把openid保存到我们的数据库中,在callback页面中实例化oauth,并调用get_openid()这个函数
+
+accesstoken,openid,存入session中,
+
+API调用事例
+,现在是项目下右qq.login.php,callback.php,访问回调得到accesstoken,openid.存入到cookie
+我们在项目中添加index.php,使其跳转到qq.login.php文件,跳转到callback.php文件,然后再跳转到index.php,并加载两个func.php,还有qqsdk文件类,
+index.php中添加qq登录连接,在判断完cookie中是否有openid,accesstoken,如果登录了,让用户有选择性退出,qqlogout.php
+
+登录素材注意
+
 
 
 
