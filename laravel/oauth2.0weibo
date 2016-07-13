@@ -4,5 +4,7 @@ weibo
 open.weibo.com  开发者信息编辑
 网站接入
 引入SDK
-官方文档SDK下载php,跳转github下载安装包,放本地apache服务器根目录下面,根目录下有自己的config.php
+官方文档SDK下载php,跳转github下载安装包,放本地apache服务器根目录下面,根目录下有自己的config.php写入debug调试函数
+index.php  ->  wblogin.php  ->  callback.php  ->  index.php
+
 
