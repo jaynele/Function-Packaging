@@ -3,4 +3,8 @@ weibo
 引入官方SDK,解读,整合到web应用中,调用API的开发示例,开放平台政策
 open.weibo.com  开发者信息编辑
 网站接入
+引入SDK
+官方文档SDK下载php,跳转github下载安装包,放本地apache服务器根目录下面,根目录下有自己的config.php写入debug调试函数
+index.php  ->  wblogin.php  ->  callback.php  ->  index.php
+
 
