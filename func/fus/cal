@@ -38,3 +38,45 @@
 40 //    echo $test->calculate(2,3,'+');//打印:5
 41     echo $test->calculate(5,0,'/');//打印:您输入有误:除数不能为0
 42 ?>
+
+
+<?php
+    /**
+     * 求余类（remainder）
+     *
+     */
+    class OperationRem extends Operation {
+        public function getValue($num1,$num2){
+            return $num1%$num12;
+        }
+    }
+?>
+
+<?php
+ 2     /**
+ 3      * 工程类，主要用来创建对象
+ 4      * 功能：根据输入的运算符号，工厂就能实例化出合适的对象
+ 5      *
+ 6      */
+ 7     class Factory{
+ 8         public static function createObj($operate){
+ 9             switch ($operate){
+10                 case '+':
+11                     return new OperationAdd();
+12                     break;
+13                 case '-':
+14                     return new OperationSub();
+15                     break;
+16                 case '*':
+17                     return new OperationSub();
+18                     break;
+19                 case '/':
+20                     return new OperationDiv();
+21                     break;
+22             }
+23         }
+24     }
+25     $test=Factory::createObj('/');
+26     $result=$test->getValue(23,0);
+27     echo $result;
+28 ?>
