@@ -1,0 +1,40 @@
+<?php
+ 4     class Calc{
+ 5         /**
+ 6          * 计算结果
+ 7          *
+ 8          * @param int|float $num1
+ 9          * @param int|float $num2
+10          * @param string $operator
+11          * @return int|float
+12          */
+13         public function calculate($num1,$num2,$operator){
+14             try {
+15                 $result=0;
+16                 switch ($operator){
+17                     case '+':
+18                         $result= $num1+$num2;
+19                         break;
+20                     case '-':
+21                         $result= $num1-$num2;
+22                         break;
+23                     case '*':
+24                         $result= $num1*$num2;
+25                         break;
+26                     case '/':
+27                         if ($num2==0) {
+28                             throw new Exception("除数不能为0");
+29                         }
+30                         $result= $num1/$num2;
+31                         break;
+32                 }
+33             return $result;
+34             }catch (Exception $e){
+35                 echo "您输入有误:".$e->getMessage();
+36             }
+37         }
+38     }
+39     $test=new Calc();
+40 //    echo $test->calculate(2,3,'+');//打印:5
+41     echo $test->calculate(5,0,'/');//打印:您输入有误:除数不能为0
+42 ?>
