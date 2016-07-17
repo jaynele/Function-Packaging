@@ -29,3 +29,41 @@
 	
 </body>
 </html>
+
+
+
+<?php
+ 2     class Sort{ 
+ 3         /**
+ 4          * 简单的选择排序
+ 5          * 
+ 6          * @param unknown_type $arr
+ 7          */
+ 8         public function selectSort(&$arr) { 
+ 9             $len=count($arr);
+10             for ($i=0;$i<$len;$i++) {
+11                 $min=$i;
+12                 for ($j=$i+1;$j<=$len-1;$j++) {
+13                     if ($arr[$min]>$arr[$j]) {//如果找到比$arr[$min]较小的值，则将该下标赋给$min
+14                         $min=$j;
+15                     }
+16                 }
+17                 if ($min!=$i){//若$min不等于$i，说明找到了最小值，则交换
+18                     $this->swap($arr[$i],$arr[$min]);
+19                 }
+20             }
+21         }
+22         /**
+23          * 将$a和$b两个值进行位置交换
+24          */
+25         public function swap(&$a,&$b) {
+26             $temp=$a;
+27             $a=$b;
+28             $b=$temp;
+29         }
+30     }
+31     $arr=array(4,6,1,2,9,8,7,3,5);
+32     $test=new Sort(); 
+33     $test->selectSort($arr);//简单的选择排序
+34 //    var_dump($arr);
+35 ?>
