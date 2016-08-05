@@ -1,0 +1,9 @@
+<?php 
+$year = date('Y');
+// $time1 = date($year.'-m-d',strtotime("01 01"));
+$time1 = strtotime(date($year.'-01-01'));
+$time2 = strtotime(date($year.'-03-31'));
+$time = $time2 - $time1;
+$day = $time/(24*60*60);
+echo $day;
+ ?>
