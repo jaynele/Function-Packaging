@@ -1,0 +1,115 @@
+/**
+    +----------------------------------------------------------
+    *   文书上传获取文件
+    +----------------------------------------------------------
+    */ 
+    public function getfiles(){
+      $i = 0;
+      foreach($_FILES as $file){
+        if(is_string($file['name'])){
+          $files[$i]=$file;
+          $i++;
+        }elseif(is_array($file['name'])){
+          foreach($file['name'] as $key=>$val){
+            $files[$i]['name'] = $file['name'][$key];
+            $files[$i]['type'] = $file['type'][$key];
+            $files[$i]['tmp_name'] = $file['tmp_name'][$key];
+            $files[$i]['error'] = $file['error'][$key];
+            $files[$i]['size'] = $file['size'][$key];
+            $i++;
+          }
+        }
+      }
+        var_dump($files);
+        return $files;
+    }
+    /**
+    +----------------------------------------------------------
+    *   文书上传获取文件后缀名
+    +----------------------------------------------------------
+    */ 
+    protected function getExt($filename){
+        return strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+    }
+    /**
+    +----------------------------------------------------------
+    *   文书上传获取文件唯一名
+    +----------------------------------------------------------
+    */ 
+    protected function uniName(){
+        return md5(uniqid(microtime(true),true));
+    }
+    /**
+    +----------------------------------------------------------
+    *   文书上传
+    +----------------------------------------------------------
+    */ 
+    public function uploadFile($fileinfo,$maxsize = 2097152,$allowExt=array('jpeg','jpg','png','gif','wbmp'),$flag=true,$path = SITE_PATH.'/Public/upload/graduateFile'){
+      //判断错误号
+        if($fileinfo['error'] === UPLOAD_ERR_OK){
+            //检测文件上传大小
+            //$maxsize = 2097152; 2M  
+            if($fileinfo['size']>$maxsize){
+                $res['mes']=$fileinfo['name'].'上传文件过大';
+            }
+            //检测上传文件类型
+            $ext= $this->getExt($fileinfo['name']);
+            //$allowExt=array('jpeg','jpg','png','gif','wbmp');
+            if(!in_array($ext,$allowExt)){
+                $res['mes']=$fileinfo['name'].'文件类型不对';
+            }
+            //检测是否为真实图片
+            //$flag=true;
+            if($flag){
+                if(!getimagesize($fileinfo['tmp_name'])){
+                    $res['mes']=$fileinfo['name'].'不是真实图片类型';
+                } 
+            }
+            //判断文件是否是通过HTTP POST方式上传来的
+            if(!is_uploaded_file($fileinfo['tmp_name'])){
+                 $res['mes']=$fileinfo['name'].'文件不是通过HTTP POST方式上传来的';
+            }
+            //if($res){return $res;} 
+            //$path = './upload';
+            $ext=$this->getExt($fileinfo['name']);
+            $uniName=$this->uniName();
+            $destination1 = $path.'/graduateWord/'.date('Ym',time()).'/'; 
+            if(!file_exists($destination1)){
+                mkdir($destination1,0777,true);
+                chmod($destination1,0777);
+            }
+            $destination = $destination1.$uniName.'.'.$ext;
+            dump($destination);
+            if(!@move_uploaded_file($fileinfo['tmp_name'],$destination)){
+               $res['mes']=$fileinfo['name'].'文件移动失败';
+            }
+            $res['mes']='文件上传成功';
+            $res['dest']=$destination;
+            return $res;
+        }else{
+            //匹配错误信息
+            switch($fileinfo['error']){
+                case 1: 
+                    $res['mes'] =  '上传文件超过了PHP配置文件中upload_max_filesize选项的值';
+                    break;
+                case 2:
+                    $res['mes'] = '超过了表单max_file_size的大小';
+                    break;
+                case 3:
+                    $res['mes'] =  '文件只有部分被上传';
+                    break;
+                case 4:
+                    $res['mes'] =  '没有文件被上传';
+                    break;
+                case 6:
+                    $res['mes'] =  '找不到临时文件';
+                    break;
+                case 7:
+                    $res['mes'] =  '文件写入失败';
+                    break;
+                case 8:
+                    $res['mes'] =  '上传的文件被php扩展程序中断';
+                    break;
+            }
+        }
+    }
