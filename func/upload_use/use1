@@ -113,3 +113,13 @@
             }
         }
     }
+
+使用方法中
+$files = $this->getFiles();
+        foreach($files as $fileinfo){
+            $res=$this->uploadFile($fileinfo);
+            echo $res['mes'],'<br />';
+            $uploadFiles[]=$res['dest'];
+        }
+        $uploadFiles=array_values(array_filter($uploadFiles));
+        print_r($uploadFiles);
