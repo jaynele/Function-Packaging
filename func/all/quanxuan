@@ -1,0 +1,13 @@
+$('#settle1').click(function(){
+			$('.settle').prop('checked','true');
+		});
+		$('#settle2').click(function(){
+			$('.settle').each(function(i){
+				$('.settle').eq(i).prop('checked', !($('.settle').eq(i).prop('checked')));
+				$().eq().val();
+				console.log($('.settle').eq(i).val());return false;
+			});
+		});
+		$('#settle3').click(function(){
+			$('.settle').prop('checked',false);
+		});
