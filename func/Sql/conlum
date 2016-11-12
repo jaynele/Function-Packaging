@@ -1,2 +1,12 @@
 1、列的去重，distinct
 2、列的去重后数的统计count(distinct name)
+3、mysqli 扩展
+  支持面向对象，支持预处理，支持事务，运行快，安全
+4、mysqli 安装配置
+   开启php_mysqli.dll  动态链接库
+   extention.dir = ''  指定目录  找到ext所在目录即可 
+   重启服务器 就可以使用这个扩展了
+   证明mysqli已经开启，phpinfo();
+   检测扩展是否已经加载  extension_loaded('mysqli');
+   检测扩展中的某个函数是否可以使用 function_exists('mysqli_connect');
+   检测得到的 扩展都哪些get_loaded_extensions();
