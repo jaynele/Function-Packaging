@@ -1,0 +1,48 @@
+1、mysqli 配置链接
+  phpexcel安装
+  准备工作完成
+2、$objPHPExcel = new PHPExcel();   
+   //根据不同的情况创建多个sheet
+   for($i=1;$i<=2;$i++){
+      //因为在实例化时候，已经创建了一个sheet，所以这里从2开始创建
+      if($i>=2){
+          $objPHPExcel->createSheet();
+      }
+      $objPHPExcel->setActiveSheetIndex($i-1);
+      $objSheet=$objPHPExcel->getActiveSheet();
+      $objSheet->setTitle($i.'活动sheet');
+      //获取数据$data，此处省略mysqli的操作过程
+      //设置标题填充到excel
+      $objSheet->setCellValue('A1','姓名')->setCellValue('B1','地区');
+      //除标题以外，循环取出数据填充到
+      $j = 2;
+      foreach($data as $k=>$v){
+        $objSheet->setCellValue('A'.$j,$v['writer_name'])->setCellValue('B'.$j,$v['writer_region']);
+        $j++;
+      }
+   }  
+   //生成excel文件
+   $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+   //保存生成的excel文件
+   $objWriter->save($dir.'/export.xls');
+3、输出到浏览器
+   function browser_export($type,$filename){
+        //excel03
+       if($type == 'Excel5'){
+          header('Content-Type: application/vnd.ms-excel');
+       }else{
+       //excel07
+          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');   
+       }
+       //文件名称
+       header('Content-Disposition: attachment;filename="'.$filename.'"');
+       //禁止浏览器缓存
+       header('Cache-Control: max-age=0');
+   }
+    //生成excel文件
+   $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+   browser_export('Excel5','export1.xls');
+   $objWriter->save('php://output');
+4、样式，字体，合并单元格，背景颜色，边框，对齐方式，需求分析
+   
+   
