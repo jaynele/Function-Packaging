@@ -1,6 +1,7 @@
+header('content-type:text/html;charset=utf-8');
 mysqli 扩展
   支持面向对象，支持预处理，支持事务，运行快，安全
-4、mysqli 安装配置
+1、mysqli 安装配置
    开启php_mysqli.dll  动态链接库
    extention.dir = ''  指定目录  找到ext所在目录即可 
    重启服务器 就可以使用这个扩展了
@@ -8,3 +9,38 @@ mysqli 扩展
    检测扩展是否已经加载  extension_loaded('mysqli');
    检测扩展中的某个函数是否可以使用 function_exists('mysqli_connect');
    检测得到的 扩展都哪些get_loaded_extensions();
+2、属性、方法、预处理、事务的支持
+3、mysqli操作数据库
+   连接数据库， 选数据库，设定字符集，sql查询，结果输出，关闭数据库
+   （1）$mysqli = new mysqli($phpexcel['host'],$phpexcel['username'],$phpexcel['password']);
+   $mysqli->select_db($phpexcel['database']);
+   $mysqli->set_charset($phpexcel['charset']);
+   $res = $mysqli->query($sql);
+   if($res && $res->num_rows >0){
+	    // var_dump($res->fetch_all());
+	     var_dump($res->fetch_all(MYSQLI_ASSOC));
+       $res->fetch_row();
+       $res->fetch_assoc();
+       $res->fetch_array(MYSQLI ASSOC); 每个+上面两个的 结合+关联
+       $res->fetch_object(MYSQLI_ASSOC); 以对象形式返回
+   }
+   $mysqli->free();
+   $mysqli->close();
+   $mysqli->insert_id;
+   $mysqli->affected_rows;   影响的条数，-1sql有错，0没有这条语句
+   $mysqli->errno;$mysqli->error;
+   $mysqli->close();
+   （2）$mysqli = new mysqli();
+        $mysqli->connect($phpexcel['host'],$phpexcel['username'],$phpexcel['password']);
+        $mysqli->select_db($phpexcel['database']);
+    (3)$mysqli = @new mysqli($phpexcel['host'],$phpexcel['username'],$phpexcel['password'],$phpexcel['database']);
+       if($mysqli->connect_errno){
+            die('connect error:'.$mysqli->connect_error);
+       }
+        echo $mysqli->client_info;   调用客户端的信息
+        echo $mysqli->get_client_info();    通过调用方法调用客户端信息
+        echo $mysqli->client_version;   只能通过属性获取客户端版本
+        echo $mysqli->server_info;    通过属性获取服务端信息
+        echo $mysqli->get_server_info();  通过 调用方法获取服务器信息
+        echo $mysqli->server_version;   只能通过属性来获取 服务器版本
+        $mysqli->escape_string($_POST);  转义用户输入的内容
