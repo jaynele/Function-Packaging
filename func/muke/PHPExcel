@@ -49,6 +49,6 @@
    document文件夹，是合并单元格作用的，develop document
    $objSheet->mergeCells();
    alignment and wrap text 文字居中
-5、制作图表
+5、制作图表.......文档
    
    
