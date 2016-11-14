@@ -44,5 +44,11 @@
    browser_export('Excel5','export1.xls');
    $objWriter->save('php://output');
 4、样式，字体，合并单元格，背景颜色，边框，对齐方式，需求分析
+   取数据，导出
+   examples文件夹，是导出 excel文件的
+   document文件夹，是合并单元格作用的，develop document
+   $objSheet->mergeCells();
+   alignment and wrap text 文字居中
+5、制作图表
    
    
