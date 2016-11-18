@@ -7,7 +7,7 @@
 3、pdo链接数据库
     （1）通过参数链接数据库
     try(){
-      $dsn = 'msyql:host=localhost;dbname=ceshi';
+      $dsn = 'mysql:host=localhost;dbname=ceshi';    //数据源,mysql数据驱动，驱动语法：，
       $username='root';
       $password='';
       $objPDO = new PDO（$dsn,$username,$password）
@@ -32,3 +32,204 @@
     }catch($exception $e){
       echo $e->getMessage();
     }
+4、PDO 方法列表
+   exec(); 执行一条sql语句，并返回其受影响的行数，但是对于查询是没有作用的
+   query();  执行一条sql语句，返回一个PDOStatement对象
+   prepare();  准备要执行的sql语句， 返回一个PDOStatement对象
+   quote();  返回 一个添加引号的字符串，用于sql语句中
+   lastInsertId();  返回最后插入行的ID
+   setAttribute();   设置数据库连接属性
+   getAttribute();  得到数据库连接的属性
+   errorCode();  获取跟数据库句柄上一次操作相关的sqlstate
+   errorInfo();   获取跟数据库句柄上一次操作的错误信息
+   beginTransection();启动一个事务 
+   commit();   提交一个事务
+   rollBack();  回滚一个事务
+   inTransaction();  检测是否在一个内
+    
+    
+   预处理得到的对象可以使用的方法
+   execute();执行一条预处理语句
+   rowCount();返回上一个sql语句影响的行数
+   fetch();从结果集中获取一行
+   fetchAll();返回一个 包含结果集中所有行的数组
+   setFetchModel();为语句设置默认的获取模式
+   fetchColumn();从结果集中的下一行返回单独的一列
+   fetchObject();获取下一行并作为一个对象返回
+   bindParam();绑定一个参数到指定的变量名
+   bindValue();把一个值绑定到一个参数
+5、 pdo建表
+    try(){
+      $objPDO = new PDO('msyql:host=localhost;dbname=bendi_ceshi','root','');
+      //exec(); 执行一条sql语句，返回受影响的行数但是对于select查询的语句确实没有效果的,如果没有受影响则返回值是0
+      $sql =<<<EOF
+      CREATE TABLE IF NOT EXISTS ceshi1(
+      id INT(10) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+      name CHAR(50) NOT NULL UNIQUE,
+      password CHAR(32) NOT NULL,
+      email CHAR(30) NOT NULL,
+      );
+     EOF;//EOF中不要有空格
+      $res = $objPDO->exec($sql);
+      var_dump($res);
+    }catch(Exception $e){
+      echo $e->getMessage();
+    }
+6、pdo数据添
+   try(){
+      $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+      $sql=<<<EOF
+      INSERT ceshi1(name,password,email) VALUES ('king1','king','111123@qq.com')
+      EOF;
+      $res = $objPDO->exec($sql);
+      var_dump($res);
+      $lastId = $objPDO->lastInsertId();//获取插入的最后一条id是在插入一行的情况下
+      var_dump($lastId);
+   }catch(Exception $e){
+    echo $e->getMessage();
+   }
+7、pdo数据更
+   header('content-type:text/html;charset=utf-8');
+   try(){
+       $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+       $sql=<<<EOF
+       UPDATE ceshi1 SET name='liu1' WHERE id=2
+EOF;
+   $res = $objPDO->exec($sql);
+   echo $res.'条信息被修改';
+   }catch(Exception $e){
+       echo $e->getMessage();   
+   }
+8、pdo数据删
+   header('content-type:text/html;charset=utf-8');
+   try(){
+      $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+      $sql=<<<EOF
+      DELETE FROM ceshi1 WHERE id=1
+      EOF;
+      $res = $objPDO->exec($sql);   //如果执行失败，那么只能返回时一个 bool false;
+      echo $res.'条数据被删除';
+   }catch(Exception $e){
+      echo $e->getMessage();
+   }
+
+
+9、pdo错误   //查看sql中的错误信息
+  header('content-type:text/html;charset=utf-8');
+  try(){
+      $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi');
+      $sql=<<<EOF
+      DELETE FROM ceshi1 WHERE id=1
+      EOF;//注意这里面不能有空格
+      $res = $objPDO->exec($sql);//如果sql有误，那么返回值为bool(false),如果影响行数没有，则为0
+      if($res === false){
+        echo $objPDO->errorCode();   //错误码
+        echo '<hr/>';
+        $errorInfo = $objPDO->errorInfo();
+        var_dump($errorInfo);    //1、错误码 2、错误编号  3、错误信息
+      }
+  }catch(Exception $e){
+      echo $e->getMessage();
+  }
+
+10、pdo  query都可以做，只执行一条查询
+    header('content-type:text/html;charset=utf-8');
+    try(){
+        $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+        $sql=<<<EOF
+        INSERT ceshi1(name,password,email) VALUES('liu11','liu11','11@qq.com')
+        EOF;
+        $res = $objPDO->exec($sql);
+        echo $res.'条数据已添加';
+        $sql=<<<EOF
+        SELECT * FROM ceshi1 WHERE id=2
+        EOF
+        $res = $objPDO->query($sql);
+        var_dump($res);
+        foreach($res as $r){
+          echo '姓名：'.$r['name'];
+          echo '<br />';
+          echo '密码：'.$r['password'];
+          echo '<br />';
+          echo '邮箱：'.$r['email'];
+        }
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }
+11、PDOStatement对象
+    预处理prepare()  execute() fetch()
+    获取一行  fetch()  
+    header('content-type:text/html;charset=utf-8');
+    try(){
+      $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+      $sql=<<<EOF
+      SELECT * FROM ceshi1 WHERE name='liu'
+      EOF;
+      $res = $objPDO->prepare($sql);
+      $row = $res->execute($res);
+      $r = $res->fetch();
+      var_dump($r);//获取一行数据，索引以及关联键都可以查询到
+    }catch(Exception $e){
+      echo $e->getMessage();
+    }
+12、PDOStatement对象
+     获取多行  1、fetch()   循环取一行，取所有行
+     header('content-type:text/html;charset=utf-8');
+     try(){
+        $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+        $sql=<<<EOF
+        SELECT * FROM ceshi1
+        EOF;
+        $res = $objPDO->prepare($sql);
+        $r = $res->execute();
+        if($r){
+          while($row = $res->fetch()){
+            var_dump($row);
+            echo '<br />';       
+          }
+        }
+     }catch(Exception $e){
+        echo $e->getMessage();
+     }
+13、PDOStatement 对象
+    获取多行  fetchAll();
+    header('content-type:text/html;charset=utf-8');
+    try(){
+      $objPDO = new PDO('mysql:host=localhost;dbname=bendi_ceshi','root','');
+      $sql=<<<EOF
+      SELECT * FROM ceshi1
+      EOF;
+      $res = $objPDO->prepare($sql);
+      $r = $res->execute();
+      $rows = $res->fetchAll();
+      var_dump($rows);//获取索引和关联都存在的数组
+    }catch(Exception $e){
+      echo $e->getMessage();
+    }
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+   
+   
+    
+   
