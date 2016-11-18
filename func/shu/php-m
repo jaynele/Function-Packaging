@@ -1,0 +1,63 @@
+1、类是用来生成对象的模板
+   class ShopProduct{ }//便是 一 个简单的类
+2、对象是类中定义的模板定义的数据
+   $objShopProduct1 = new ShopProduct();//便是 类的一个实例
+   $objShopProduct1 = new ShopProduct();//便是类的 另外一个实例
+   同一个 类生成的 不同实例，是有区别的，打印输出这两个实例就可以看到
+3、类的特定变量，属性，跟普通的变量一样，只是要加入可见性关键字
+   class ShopProduct{
+        public $title = 'default product';   //设置默认值
+        public $productMainName = 'main Name';
+        public $productFirstName = 'first Name';
+        public $price = 0;
+   }
+   这里我们可以打印出对象的属性
+   尽量不要在类外动态的增加属性到对象中，虽然可以实现
+   类在创建时候已经有固定的属性和方法， 不要动态添加属性
+4、属性可以让对象存储数据，类方法可以让对象执行任务，方法是来操作属性的
+   类方法是类中声明的特殊函数
+   方法必须在类中声明，设定可见性关键字，如果不设置则是默认的public，这是区别于函数的
+   类方法中的$this是伪变量
+   class ShopProduct{
+      public $title;
+      public $productMainName;
+      public $productFirstName;
+      public $price;
+      public function getProduct(){
+        return $this->productMainName.$this->productFirstName;
+      }
+   }
+   $objShopProduct = new ShopProduct();
+   $objShopProduct->productMainName = 'Main name';
+   $objShopProduct->productFirstName = 'First name';
+   var_dump($objShopProduct->getProduct()):
+5、创建  构 造方法，确保必要的属性被设置，完成任何需要准备的工作，使用new时，构造方法调用
+   class ShopProduct{
+      public $title;
+      public $productMainName;
+      public $productFirstName;
+      public $price = 0;
+      public function __construct($title,$mainName,$firstName,$price){
+        $this->title = $title;
+        $this->productMainName = $mainName;
+        $this->productFirstName = $firstName;
+        $this->price = $price;
+      }
+      public function getProduct(){
+        return '产品信息是：'.$this->productMainName.$this->productFirstName;
+      }
+   }
+   $objShopProduct = new ShopProduct('title11','mainName11','firstName11',5.99);
+   var_dump($objShopProduct->getProduct());
+6、字符串类型查询显示 字符串数据，并用字符串函数处理字符串 数据
+   基本类型有字符串，整型，布尔型
+   定义 类方法或者定义函数时，指定参数的类型
+   赋给变量的值都有一种类型， 检测这种类型的方法有：
+   is_bool();
+   is_integer();
+   is_double();
+   is_string();
+   is_object();
+   is_array();
+   is_source();
+   is_NULL();
