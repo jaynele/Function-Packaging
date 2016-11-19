@@ -1,0 +1,31 @@
+1、下面的函数，如果参数是相应的类型，返回true
+   is_bool();
+   is_integer();
+   is_double();
+   is_string();
+   is_object();
+   is_array();
+   is_resource();
+   is_null();
+2、处理方法、或函数，检测参数的类型很重要
+   （1）setting.xml
+        <settings>
+            <resolvedomains>false</resolvedomains>
+        </settings>
+    (2)php文件
+         class AddressManager{
+              private $addresses = array('209.131.36.159','74.125.19.106');
+              public function outputAddresses($resolve){
+                   foreach($this->addresses as $address){
+                        print $address;
+                        if($resolve){
+                            print "(".gethostbyaddr($address).')';
+                        }
+                        print '\n';
+                   }
+              }
+         }
+         $settings = simplexml_load_file('settings.xml');
+         $manager = new AddressManager();
+         $manager->outputAddresses((string)$settings->resolvedomains);
+      解释，通过两个文件，说明false的字符串会被当做布尔的true来判断
