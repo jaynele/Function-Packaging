@@ -1,3 +1,50 @@
+1、简单匹配
+   $patt = '/hi/';
+   $str = 'hi,his book';
+   $preg_match_all($patt,$str,$res);
+   var_dump($res);//从头匹配到末尾，每匹配到一个就添加到一个数组中
+2、^（开始） $（ 结尾）  \b(单词 )   
+   .（任意字符）  \w（【a-zA-Z0-9】）   \s（空白）   \d（【0-9】）
+3、找单词中的元素
+  $patt = '/\bhi\b/';
+  $str = 'hi,this his book';
+  preg_match_all($patt,$str,$res);
+  var_dump($res):
+4、不包含
+   $patt = '/^[^47]{11}$/';
+   $str = array('1231231312','45645645645','12312312312');
+   foreach($str as $v){
+        preg_match_all($patt,$v,$res);     
+        var_dump($res);
+   }
+5、空格拆分单词
+   $patt = '/\W{1,}/';
+   $str = 'tomorrorw is a';
+   var_dump(preg_split($patt,$str));
+6、多个空格 替换 成一个
+  $patt = '/\s{1,}/';
+  $str = 'is     mo s';
+  var_dump(preg_replace($patt,'',$str));
+7、匹配多少次
+   *   +   \?   {n}   {n,m}   {n,}
+   $patt = '/go+d/';
+   $str = 'god   good  gooooood';
+   var_dump(preg_replace($patt,'god',$str));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 regex
 
 <?php
