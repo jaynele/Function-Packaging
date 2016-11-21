@@ -29,3 +29,146 @@
          $manager = new AddressManager();
          $manager->outputAddresses((string)$settings->resolvedomains);
       解释，通过两个文件，说明false的字符串会被当做布尔的true来判断
+      检测类型，转换类型，依赖清晰的文档，这三种方法之间进行权衡
+      参数为对象类型
+      class ShopProduct{
+         private $title;
+         private $productMainName;
+         private $productFirstName;
+         private $price = 0;
+         public function __construct($title,$mainName,$firstName,$price){
+            $this->title = $title;
+            $this->productMainName = $mainName;
+            $this->productFirstName = $firstName;
+            $this->price = $price;
+         }
+         public function getProduct(){
+            return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+      }
+      class ShopProductWrite{
+         public function writer($ShopProduct){
+            $str = '($ShopProduct->title):'.$ShopProduct->getProduct().$ShopProduct->price;
+            print_r($str);
+         }
+      }
+      $objShopProduct = new ShopProduct('title11','mainName1','firstName1',5.5);
+      $objShopProductWriter = new ShopProductWrite();
+      $objShopProductWriter->writer($objShopProduct);
+      这里不把writer()方法放到ShopProduct类中，是责任 分明，一个负责管理数据， 一个负责写入数据
+      强调参数为特定对象类型，否则报错
+      class ShopProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         public $price;
+         public function __construct($title,$mainName,$firstName,$price){
+            $this->title = $title;
+            $this->productMainName = $mainName;
+            $this->productFirstName = $firstName;
+            $this->price = $price;
+         }
+         public function getProduct(){
+            return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+      }
+      class ShopProductWriter{
+         public function Writer(ShopProduct $objShopProduct){
+            $str = '('.$objShopProduct->title.'):'.$objShopProduct->productMainName.$objShopProduct->productFirstName.$objShopProduct->price;
+            var_dump($str);
+         }
+      }
+      class wrong{}
+      $objShopProduct = new ShopProduct('title1','productMainName1','productFirstName1',5.5);
+      $objShopProductWriter = new ShopProductWriter();
+      $objShopProductWriter->writer(new wrong());
+      这里有了参数类型的提示，就不用再用类型检测了
+3、子类被称为父类的扩展
+    把多个需求放到同一个类中，可能会包含多余的方法， 用多余的 构造方法参数 例：
+    class ShopProduct{
+      public $title;
+      public $productMainName;
+      public $productFirstName;
+      public $price;
+      public $numberPages;
+      public $playLength;
+      public function __construct($title,$mainName,$firstName,$price,$numberPages,$playLength){
+            $this->title = $title;
+            $this->productMainName = $mainName;
+            $this->productFirstName = $firstName;
+            $this->price = $price;
+            $this->numberPages = $numberPages;
+            $this->playLength = $playLength;
+      }
+      public function getShopProduct(){
+            return $this->productMainName.'&nbsp;'.$this->productFirstName;
+      }
+      public function getnumberPages(){
+            return $this->numberPages;
+      }
+      public function getplayLength(){
+            return $this->playLength;
+      }
+    }
+    $objShopProduct = new ShopProduct('title1','mainName1','firstName1',5.5,22,33);
+    var_dump($objShopProduct->getnumberPages());
+    var_dump($objShopProduct->getplayLength());
+    不同的需求放到不同的类中，强行将不同需求类的字段放到一个类中，会致使类日渐庞大，难以管理
+     产生冗余的属性和方法
+     1、 说明产品类型，并同时指出产品的数量
+     class CDProduct{
+            public $title;
+            public $productMainName;
+            public $productFirstName;
+            public $price;
+            public $playLength;
+            public function __construct($title,$mainName,$firstName,$price,$playLength){
+                  $this-title = $title;
+                  $this->productMainName = $mainName;
+                  $this->productFirstName = $firstName;
+                  $this->price = $price;
+                  $this->playLength = $playLength;
+            }
+            public function getProduct(){
+                  return $this->productMainName.'&nbsp;'.$this->productFirstName;
+            }
+            public function getSummaryLine(){
+                  $base = '{$this->title}({$this->productMainName}';
+                  $base .= '{$this->productFirstName})';
+                  $base .= ':play time = {$this->playLength}';
+                  return $base;
+            }
+     }
+     class BookProduct{
+            public $title;
+            public $productMainName;
+            public $productFirstName;
+            public $price;
+            public $numberPages;
+            public __construct($title,$mainName,$firstName,$price,$numberPages){
+                  $this->title = $title;
+                  $this->productMainName = $mainName;
+                  $this->productFirstName = $firstName;
+                  $this->numberPages = $numberPages;
+                  $this->price = $price;
+            }
+            public function getShopProduct(){
+               return "{$this->productMainName}".'&nbsp;'.'{$this->productFirstName}';
+            }
+            public function getSummartLine(){
+                  $base = '({$this->title}){$this->productMainName}';
+                  $base.='{$this->productFirstName}';
+                  $base.='numberPages:{$this->numberPages}';
+                  return $base;
+            }
+     }
+     $objCD = new CDProduct('title1','mainName1','firstName1',5.5,22);
+     var_dump($objCD->getSummaryLine()):
+     var_dump($objBook->getSummaryLine());
+     大括号中的须 放到{}中才能解析
+      
+      
+      
+      
+      
+      
