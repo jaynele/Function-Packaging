@@ -1,3 +1,75 @@
+1、php开发不是字符操作都要用正则，有时候反而会影响运行效率，只有在复杂的文本数据解析时候才用
+   正则表达式在处理复杂字符操作的时候，可以提高工作效率，也在一定程度节省你的代码量
+    缺点是加大代码的复杂度，难以理解，需要加注释
+    diename();copy()  复制 文件
+    copy(dirname(__FILE__).'/setting.xml', dirname(__FILE__).'/setting1.xml');
+2、定界符
+   $regex = '/^http:\/\/([\w.]+)\/([\w]+)\/([\w]+)\.html$/i';
+   $str = 'http://www.youku.com/show_page/id_ABCDEFG.html'; 
+   $matches = array(); 
+   if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+   preg_match();$matches[0]返回与整个模式匹配的字符串 
+3、修饰符：用于改变正则表达式的行为。
+   "i"就是修饰符,表示忽略大小写，还有一个我们经常用到的是"x"表示忽略空格。
+   $regex = '/HELLO/';
+   $str = 'hello word';
+   $matches = array(); 
+   if(preg_match($regex, $str, $matches)){ 
+       echo 'No i:Valid Successful!',"\n";
+   } 
+   if(preg_match($regex.'i', $str, $matches)){ echo 'YES i:Valid Successful!',"\n"; }
+4、
+   字符域：[\w]用方括号扩起来的部分就是字符域。
+   限定符：如[\w] {3,5}或者[\w]*或者[\w]+这些[\w]后面的符号都表示限定符。现介绍具体意义。
+   {3,5}表示3到5个字符。{3,}超过3个字符，{,5}最多5个，{3}三个字符。
+   * 表示0到多个
+   + 表示1到多个。
+   脱字符号
+   ^:
+   1.放在字符域(如:[^\w])中表示否定(不包括的意思)——“反向选择”
+   2.放在表达式之前，表示以当前这个字符开始。(/^n/i,表示以n开头)。
+   注意，我们经常管"\"叫"跳脱字符"。用于转义一些特殊符号，如".","/"
+5、正向预查
+   正向预查：(?=) 相对应的 (?!)表示否定意思
+   反向预查：(?<=) 相对应的 (?<!)表示否定意思
+   前后紧跟字符
+   （不表示否定）匹配到就会以数组形式返回，以下返回前面有c,后面有e  的   数组元素有d的数组
+   $regex = '/(?<=c)d(?=e)/'; /* d 前面紧跟c, d 后面紧跟e*/ $str = 'abcdefgk'; $matches = array(); if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+   （表示否定）匹配不到就不会以数组形式返回，返回为空 ，返回空
+    $regex = '/(?<!c)d(?!e)/'; /* d 前面不紧跟c, d 后面不紧跟e*/ $str = 'abcdefgk'; $matches = array(); if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+6、反向引用
+   没有指明类型而进行的分组,将会被获取,供以后使用。
+   指明类型指的是通配符。所以只有圆括号起始位置没有问号的才能被捕捉。
+   在同一个表达式内的引用叫做反向引用。
+   调用格式：\编号(如\1)。
+   $regex = '/^(Chuanshanjia)[\w\s!]+\1$/'; $str = 'Chuanshanjia thank Chuanshanjia'; $matches = array(); if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+7、避免捕获数据
+   格式：(?:pattern)
+   优点：将使有效反向引用数量保持在最小，代码更加、清楚。
+8、命名捕获组
+   $regex = '/(?P<author>chuanshanjia)[\s]Is[\s](?P=author)/i'; $str = 'author:chuanshanjia Is chuanshanjia'; $matches = array(); if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+9、惰性匹配
+   注：会进行两部操作，请看下面的原理部分。
+   格式：限定符?
+   原理："?"：如果前面有限定符，会使用最小的数据。如“*”会取0个，而“+”会取1个，如过是{3,5}会取3个。
+   先看下面的两个代码:
+   <?php $regex = '/heL*/i'; $str = 'heLLLLLLLLLLLLLLLL'; if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+   上面结果是匹配整个
+   <?php $regex = '/heL*?/i'; $str = 'heLLLLLLLLLLLLLLLL'; if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+   上面结果是只匹配到he
+   使用‘+’来进行惰性匹配
+   <?php $regex = '/heL+?/i'; $str = 'heLLLLLLLLLLLLLLLL'; if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+   上面可以匹配到heL
+   使用{3,5}
+   <?php $regex = '/heL{3,10}?/i'; $str = 'heLLLLLLLLLLLLLLLL'; if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+10、正则表达式的注释
+    格式：(?# 注释内容)
+    用途：主要用于复杂的注释
+    贡献代码：是一个用于连接MYSQL数据库的正则表达式。
+    $regex = '/ ^host=(?<!\.)([\d.]+)(?!\.) (?#主机地址) \| ([\w!@#$%^&*()_+\-]+) (?#用户名) \| ([\w!@#$%^&*()_+\-]+) (?#密码) (?!\|)$/ix'; $str = 'host=192.168.10.221|root|123456'; $matches = array(); if(preg_match($regex, $str, $matches)){ var_dump($matches); } echo "\n";
+    
+
+
 1、简单匹配
    $patt = '/hi/';
    $str = 'hi,his book';
@@ -30,18 +102,6 @@
    $patt = '/go+d/';
    $str = 'god   good  gooooood';
    var_dump(preg_replace($patt,'god',$str));
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
