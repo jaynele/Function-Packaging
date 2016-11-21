@@ -165,10 +165,190 @@
      $objCD = new CDProduct('title1','mainName1','firstName1',5.5,22);
      var_dump($objCD->getSummaryLine()):
      var_dump($objBook->getSummaryLine());
-     大括号中的须 放到{}中才能解析
-      
-      
-      
-      
-      
+     大括号中的须 放到""中才能解析
+     一、 方法中传递参数可以1、类型提示 2、类型检测代码放到方法体中
+     instanceof  如果左边操作数是 右边操作数所表示的类型  则结果为true
+     class ShopProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         public $price;
+         public function __construct($title,$mainName,$firstName,$price){
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName;
+               $this->price = $price;
+         }
+         public function getProduct(){
+               return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+     }
+     class CDProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         public $price;
+         public $playLength;
+         public function __construct($title,$mainName,$firstName,$price,$playLength){
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName;
+               $this->price = $price;
+               $this->playLength = $playLength;
+         }
+         public function getLength(){
+               return $this->playLength;
+         }
+         public function getSummaryLine(){
+               $base = '('.$this->title.'):'.$this->productMainName;
+               $base.= $this->productFirstName;
+               $base.= 'time - :'.$this->playLength;
+         }
+         public function getProduct(){
+               return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+     }
+     class BookProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         public $price;
+         public $numberPages;
+         public function __construct($title,$mainName,$firstName,$price,$numberPages){
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName;
+               $this->price = $price;
+               $this->numberPages = $numberPages;
+         }
+         public function getNumberPages(){
+               return $this->numberPages();
+         }
+         public function getSummaryLine(){
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base.=$this->productFirstName;
+               $base.= 'count num:'.$this->numberPages;
+               return $base;
+         }
+         public function getProduct(){
+               return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+     }
+     class ShopProductWriter{
+         public function writer($ShopProduct){
+               if(!($ShopProduct instanceof CDProduct) && !($ShopProduct instanceof BookProduct)){
+                     die('请传入正确的数据类型');
+               }
+               return $ShopProduct->getSummaryLine();
+         }
+     }
+     $objCDProduct = new CDProduct('title11','mainName11','firstName11',55,55);
+     $objShopProductWriter = new ShopProductWriter();
+     var_dump($objShopProductWriter->writer($objCDProduct));
+     二、不同的需求有单独的类，但是不同的需求都有公用的方法，每种类型处理，有不同的方法调用
+      继承首先是要找到基类的公用方法，留公用方法， 对需要特殊处理，但是又是平行关系不能放到一起的方法， 才另外作继承 ,基类中写好需要用到的属性
+      继承，扩展修改父类的功能
+      class ShopProduct{
+            public $title;
+            public $productMainName;
+            public $productFirstName;
+            public $price;
+            public $playLength;
+            public $numberPages;
+            public function __construct($title,$mainName,$firstName,$price,$playLength,$numberPages){
+                  $this->title = $title;
+                  $this->productMainName = $mainName;
+                  $this->productFirstName = $firstName;
+                  $this->playLength = $playLength;
+                  $this->numberPages = $numberPages;
+            }
+            public function getSummaryLine(){
+                  $base = '('.$this->title.':)'.$this->productMainName;
+                  $base .= $this->productFirstName;
+                  return $base;
+            }
+            public function getProduct(){
+                  return $this->productMainName.'&nbsp;'.$this->productFirstName;
+            }
+      }
+      class CDProduct extends ShopProduct{
+            public function getSummaryLine(){
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               $base .= $this->playLength;
+               return $base;
+            }
+            public function getPlayLength(){
+               return $this->PlayLength;
+            }
+      }
+      class BookProduct extends ShopProduct{
+            public function getSummaryLine(){
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               $base .= 'count -- number :'.$this->numberPages;
+               return $base;
+            }
+            public function getNumberPages(){
+               return $this->numberPages();
+            }
+      }
+      通过基类提供同样的保证，而不必提供任何的实现， 通过继承我们有自身的和父类的功能，从搜索的角度看，如果自身没有这个方法，我们可以 搜索到父类，看父类是否有这个方法
+      这个 时 候基类处理了大量 需要的属性，构造方法在基类中。实际放子类比较合适  
+      三、构造方法和继承
+      子类中定义构造方法时，需要传参数到父类的构造方法，否则可能是一个构造不完整的对象
+      要调用父类的方法  parent::__construct();
+      修改子类，让子类只处理自身的数据，下面修改我们的代码
+      class ShopProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         public $price;
+         public function __construct($title,$mainName,$firstName,$price){
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName;
+               $this->price = $price;
+         }
+         public function getProduct(){
+            return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+         public function getSummaryLine(){
+               $base = '('.$this->title':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               return $base;
+         }
+      }
+      class BDProduct extends ShopProduct{
+            public $playLength;
+            public function __construct($title,$mainProduct,$firstProduct,$price,$playLength){
+                 parent::__construct($title,$mainProduct,$firstProduct,$price);
+                 $this->playLength = $playLength;
+            }
+            public function getPlayLength(){
+                 return $this->playLength;
+            }
+            public function getSummaryLine(){
+                  $base = '('.$this->title.':)'.$this->productMainName;
+                  $base .= $this->productFirstName;
+                  $base .= 'length:'.$this->playLength;
+                  return $base;
+            }
+      }
+      clase BookProduct extends ShopProduct{
+            public $numberPages;
+            public function __construct($title,$mainName,$firstName,$price,$numberPages){
+                  parent::__construct($title,$mainName,$firstName,$price);
+                  $this->numberPages = $numberPages;
+            }
+            public function getNumberPages(){
+               return $this->numberPages;
+            }
+            public function getSummaryLine(){
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               $base .= 'count ---'.$this->numberPages;
+               return $base;
+            }
+      }
       
