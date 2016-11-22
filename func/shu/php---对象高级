@@ -1,0 +1,111 @@
+1、通过对象来访问 属性和方法， 也可以通过类来访问属性和方法，这样的属性和方法是静态的，必须用static来声明
+   静态方法是 以类为作用域的函数，静态方法只能访问 静态属性，不能访问普通属性，因为普通属性是属于类的实例 也就是对象的
+   访问静态方法和静态实例如下：
+   class StaticExample{
+      static public $aNum = 0;
+      static public function sayHello(){
+        var_dump('hello');
+      }
+   }
+   var_dump(StaticExample::$aNum);
+   StaticExample::sayHello();
+   现在我们用::来访问类而不是对象，子类中我们用::来访问基类，本类中我们用self关键字来访问静态方法，静态属性
+   parent指向基类，self指向当前类，this指向当前对象， 因此外部可以直接用类名来访问方法和属性
+   类外部可以使用类名，类内部可以使用self,如下：
+   class StaticExample{
+      static public $aNum = 0;
+      static public function sayHello(){
+          self::$aNum = 33;
+          var_dump('hello'.self::$aNum."\n");
+      }
+   }
+   我们不能在对象中使用静态方法，静态方法中不能使用伪变量this,静态方法和属性被 称为类方法和类属性
+   使用静态方法可以不用为了获取一个简单的功能而实例化一个对象
+   构造ShopProduct类的一个静态方法，自动来实例化ShopProduct这个对象， ID参数，和PDO，是返回数据库的一行记录
+   class ShopProduct{
+      private $title;
+      private $productMainName;
+      private $productFirstName;
+      protected $price;
+      private $id = 0;
+      public function __construct($title,$mainName,$firstName,$price){
+          $this->title = $title;
+          $this->productMainName = $mainName;
+          $this->productFirstName = $firstName;
+          $this->price = $price;
+      }
+      public function getProduct(){
+          return $this->productMainName.'&nbsp;'.$this->productFirstName;
+      }
+      public function getSummaryLine(){
+          $base = '('.$this->title.':)'.$this->productMainName;
+          $base .= $this->productFirstName;
+          return $base;
+      }
+      public function setID($id){
+          $this->id = $id;
+      }
+      static public function getInstance($id,PDO $objPDO){
+          $stmt = $objPDO->prepare('SELECT * FROM products WHERE id = '.$id);
+          $res = $stmt->execute(array($id));
+          $row = $stmt->fetch();
+          if(empty($row)){
+              return null;
+          }
+          if($row['type'] == 'book'){
+              $objproduct = new BookProduct($row['title'],$row['mainname'],$row['firstname'],$row['price'],$row['numpages']);
+          }elseif($row['type'] == 'cd'){
+              $objproduct = new CDProduct($row['title'],$row['mainname'],$row['firstname'],$row['price'],$row['numpages']);
+          }else{
+              $objproduct = new ShopProduct($row['title'],$row['mainname'],$row['firstname'],$row['price']);
+          }
+          $objproduct->setID = $id;
+          $objproduct->discount = $row['discount'];
+          return $objproduct;
+      }
+   }
+   这里该有错误处理，pdo不一定就连对了正确的数据库，应该把pdo 封 装成类
+2、 有些属性是公共的、可访问的，但是客户端不可以 对其进行修改，它跟 其他的属性不一样，const,不用$, 要大写
+    常量属性只能有基本类型的值，不能将一个对象赋给常量，只能通过类而不能通过对象来进行访问常量，引用常量时不需要$符号
+    给声明过的常量赋值， 一 般可能会引起解析错误，所有实例都可以访问，并且值不能改变，通常这个时候比较适合用常量
+3、抽象类不能被 直接的实例化，它提供了子类需要的方法，子类通过继承完善它的方法，才可以实例化
+   可以用abstract 关键字来定义一个抽象类，抽象类不能实例化成对象，会有报错，一个抽象类至少包含一个抽象方法，例：
+   abstract class ShopProductWriter{
+      private $product = array();
+      public function addProduct(ShopProduct $objShopProduct){
+          $this->product[] = $objShopProduct;
+      }
+      abstract public function writer();
+   }
+   抽象方法以分号结束，不能以方法体结束
+   创建抽象方法后，要确保所有子类都实现了抽象方法，实现的细节可以先不确定，或者把子类 的方式设置为抽象，子类的实现方法不能比抽象原来的
+   抽象方法  访问限制更严格，新的实现方法的参数应该跟原来抽象方法保持一致
+4、抽象类提供了具体的实现标准，接口是纯粹的模板，接口只能定义功能，不包含实现的内容
+   接口可以用interface关键字来定义，可以包含属性和方法，但是方法体为空，如下：
+   interface Changeable{
+      public function getPrice();
+   }
+   接口和类非常相似，任何实现接口的类必须实现接口的 所有方法，否则该类必须声明为abstract
+    
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
