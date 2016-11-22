@@ -83,7 +83,7 @@
       $objShopProductWriter = new ShopProductWriter();
       $objShopProductWriter->writer(new wrong());
       这里有了参数类型的提示，就不用再用类型检测了
-3、子类被称为父类的扩展
+3、子类被称为父类的扩展,继承
     把多个需求放到同一个类中，可能会包含多余的方法， 用多余的 构造方法参数 例：
     class ShopProduct{
       public $title;
@@ -245,7 +245,7 @@
      $objCDProduct = new CDProduct('title11','mainName11','firstName11',55,55);
      $objShopProductWriter = new ShopProductWriter();
      var_dump($objShopProductWriter->writer($objCDProduct));
-     二、不同的需求有单独的类，但是不同的需求都有公用的方法，每种类型处理，有不同的方法调用
+     二、不同的需求有单独的类，但是不同的需求都有公用的方法，每种类型处理，有不同的方法调用  extends  parent
       继承首先是要找到基类的公用方法，留公用方法， 对需要特殊处理，但是又是平行关系不能放到一起的方法， 才另外作继承 ,基类中写好需要用到的属性
       继承，扩展修改父类的功能
       class ShopProduct{
@@ -295,7 +295,7 @@
       }
       通过基类提供同样的保证，而不必提供任何的实现， 通过继承我们有自身的和父类的功能，从搜索的角度看，如果自身没有这个方法，我们可以 搜索到父类，看父类是否有这个方法
       这个 时 候基类处理了大量 需要的属性，构造方法在基类中。实际放子类比较合适  
-      三、构造方法和继承
+      三、构造方法和继承,extends   parent
       子类中定义构造方法时，需要传参数到父类的构造方法，否则可能是一个构造不完整的对象
       要调用父类的方法  parent::__construct();
       修改子类，让子类只处理自身的数据，下面修改我们的代码
@@ -351,4 +351,212 @@
                return $base;
             }
       }
-      
+      基类现在仅仅知道自己的数据，子类是基类的特例，应避免让父类知道过多的关于子类的信息
+      覆写父类的方法时，只是扩展，而不是删除，可以 通过调用基类的方法，利用已存在的功能开发，而不是重新开发这个父类 ,所以parent调用父类
+      class ShopProduct{
+            public $title;
+            public $productMainName;
+            public $productFirstName;
+            public $price;
+            public function __construct($title,$mainName,$firstName,$price){
+                  $this->title = $title;
+                  $this->productMainName = $mainName;
+                  $this->productFirstName = $firstName;
+                  $this->price = $price;
+            }
+            public function getProduct(){
+                  return $this->productMainName.'&nbsp;'.$this->productFirstName;
+            }
+            public function getSummaryLine(){
+                  $base = '('.$this->title.':)'.$this->productMainName;
+                  $base .= $this->productFirstName;
+                  return $base;
+            }
+      }
+     Class CDProduct extentds ShopProduct{
+            public $playLength;
+            public function __construct($title,$mainName,$firstName,$price,$playLength){
+                  parent::__construct($title,$mainName,$firstName,$price);
+                  $this->playLength = $playLength;
+            }
+            public function getPlayLength(){
+                  return $this->playLength();
+            }
+            public function getSummaryLine(){
+                  $base = parent::getSummaryLine();
+                  $base .= '('.count length.':)'.$this->playLength;
+                  return $base;
+            }
+     }
+4、任何地方都可以使用public，只有在当前类中才能访问private方法和属性,即使在 子类中也不能访问private，可以在当前类或子类中访问protected,外面也不能访问
+     承上例：商店要打折，设置 折扣，获取最终价格，而 书这个商品不能打折，重写原来方法,折扣前价格不能在客户端显示
+     class ShopProduct{
+         public $title;
+         public $productMainName;
+         public $productFirstName;
+         protected $price;
+         public $discount;
+         public function __construct($title,$mainName,$firstName,$price){
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName; 
+               $this->price = $price;
+         }
+         public getShopProduct(){
+               return $this->productMainName.'&nbsp;'.$this->productFirstName;
+         }
+         public setDiscount($discountNum){
+               $this->discount = $discountNum;
+         }
+         public getPrice(){
+               return ($this->price - $this->discount);
+         }
+         public function getSummaryLine(){
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               return $base;
+         {
+     }
+     class BookProduct extends ShopProduct{
+         public $numberPages;
+         public function __construct($title,$mainName,$firstName,$price,$numberPages){
+               parent::__construct($title,$mainName,$firstName,$price);  
+               $this->numberPages = $numberPages;
+         }
+         public function getNumberPages(){
+               return $this->numberPages;
+         }
+         public getSummaryLine(){
+               $base = parent::getSummaryLine();
+               $base .= $this->numberPages;
+               return $base;
+         }
+         public getPrice(){
+               return $this->price;
+         }
+     }   
+     一定要 严格控制可访问性
+      类属性最初 设置为private或protected,最后需要的时候再 放宽限制条件，
+      类中的许多方法都是public,不确定的时候可以限制一下，最后再放松条件，有些方法只为本类提供，所以可以设置为private
+      1、客户端程序员，不要直接访问属性，而是通过方法来获取需要的值，成为访问 方法，getter,setter
+         getter根据环境过滤属性，setter可以限制属性的类型，属性可以通过方法来 设置，属性的类型也可以通过方法来设置 
+         类的类型提示可以限制方法的参数，setter可以限制属性的类型，
+         class ShopProductWriter{
+            private $products = array();
+            public function addProduct(ShopProduct $ShopProduct){
+               $this->products[] = $ShopProduct;
+            }
+            public function writer(){
+                  foreach($this->products as $p){
+                        $str = $p->getProduct().
+                        $str .= $p->title;
+                        $str .= $p->price."\n";
+                        return $str;
+                  }                  
+            }
+         }
+       2、设置访问控制很重要，一般最好是属性设置为私有的，一切都从方法中来获取属性的值，然后子类也是调用了基类的 方法才获取基类的属性
+        下例，我们控制整个程序的权限，重新写我们的代码
+        class ShopProduct{
+            private $title;
+            private $productMainName;
+            private $productFirstName;
+            private $discount;
+            protected $price;
+            public function __construct($title,$mainName,$firstName,$price){ 
+               $this->title = $title;
+               $this->productMainName = $mainName;
+               $this->productFirstName = $firstName;
+               $this->price = $price;
+            }
+            public function getTitle{
+               return $this->title;
+            }
+            public function getProductMainName{
+               return $this->productMainName;
+            }
+            public function getProductFirstName{
+               return $this->productFirstName;
+            }
+            public function setDiscount($discountNum){
+               $this->discount = $discountNum;
+            }
+            public function getPrice{
+               return ($this->price - $this->discount);
+            }
+            public function getShopProduct{
+               return $this->productMainName.'&nbsp;'.$this->productFirstName;
+            }
+            public function getSummaryLine{
+               $base = '('.$this->title.':)'.$this->productMainName;
+               $base .= $this->productFirstName;
+               return $base;
+            }
+        }
+        class CDProduct extends ShopProduct{
+            private $playLength;
+            public function __construct($title,$mainName,$firstName,$price,$playLength){
+               parent::__construct($title,$mainName,$firstName,$price);
+               $this->playLength = $playLength;
+            }
+            public function getPlayLength(){
+               return $this->playLength();
+            }
+            public function getSummaryLine{  
+               $base = parent::getSummaryLine();
+               $base .= $this->playLength;
+               return $base;
+            }
+        }
+        class BookProduct extends ShopProduct{
+            private $numberPages;
+            public function __construct($title,$mainName,$firstName,$price,$numberPages){
+               parent::__construct($title,$mainName,$firstName,$price);
+               $this->numberPages = $numberPages;
+            }
+            public function getPrice(){
+               return $this->price;
+            }
+            public function getNumberPages(){
+               return $this->numberPages;
+            }
+            public function getSummaryLine(){
+               $base = parent::getSummaryLine();
+               $base .= $this->numberPages;
+               return $base;
+            }
+        }
+        class ShopProductWriter extends ShopProduct{
+            private $product = array();
+            public function addProduct(ShopProduct $ShopProduct){
+               $this->product[] = $ShopProduct;
+            }
+            public function writer(){
+                $str = "";
+                foreach($this->product as $p){
+                  $str = $p->title;
+                  $str .= $p->getShopProduct();
+                  $str .= $p->price."\n";
+                }
+                return $str;
+            }
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
