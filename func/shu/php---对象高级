@@ -86,8 +86,154 @@
       public function getPrice();
    }
    接口和类非常相似，任何实现接口的类必须实现接口的 所有方法，否则该类必须声明为abstract
+   可以使用implements实现一个接口，下面我们让ShopProduct类实现上面的接口
+   class ShopProduct implements Changeable{
+       public function getPrice(){
+         return ($this->price - $this->discount);
+       }
+   }
+   ShopProduct类有这个方法，实现接口这个方法有用，因为实现接口的类接收了继承的类还有接口的类型
+   所以你只要知道方法的参数 的对象的类型，你就可以知道这个可以做什么，接收的参数对象不但有自己的功能，还有继承的基类，还有实现的接口的功能
+   任何类都可以实现接口，一个类还可以实现多个接口，  接口可以将不相关的类型联系起来，
+   如果传递 一个接口作为参数，那么就只关注是否是含有接口的这个方法，
+    类可以一次继承父类同时实现多个接口，
+    class Consultancy extends TimeService implements Bookable,Chargeable{
+         //
+    }
+    实现了不止一个接口， 多个接口用,隔开
+    PHP只支持继承一个父类，所以extends只能在一个类名之前
+4、延迟静态绑定，static关键字
+   回顾静态方法， 可以用作工厂方法，生成一个类的实例，工厂方法是生成包含类的实例的方法， 作为一个懒惰的程序员，看到下面的 代码可能会恼火
+    abstract class A{
+    }
+    class User extends A{
+      static public function create(){
+           return new User();
+      }
+    }
+    class Document extends A{
+      static public function create(){
+          return new Document();
+      }
+    }
+    25个非常重要的类库
+    每个子类都重复写，麻烦 我们可以将子类重复的部分放到超类中
+    abstract class A{
+      static public function create(){
+         return new self();
+      }
+    }
+    class User extends A{
+    }
+    class Document extends A{
+    }
+    Document::create();
+    运行上面的代码，会报错；
+    实际上，self是静态绑定，被解析为定义create方法的超类，而不是调用的Document类
+    而static则是指定的调用的类，所以这点儿的差别可以解决这个问题
+    abstract class DomainObj{
+      static public function create(){
+         return new static();
+      }
+    }
+    class User extends DomainObj{
+    }
+    class Document extends DomainObj{
+    }
+    var_dump(Document::create());
+    所以static关键字不仅可以实例化，还可以作为上下文调用的关键字，如下：
+    abstract class DomainObj{
+      private $group;
+      public function __construct(){
+         $this->group = static::getGroup();
+      }
+      static public function create(){
+         return new static();
+      }
+      static public function getGroup(){
+         return 'default';
+      }
+    }
+    class User extends DomainObj{
+      
+    }
+    class Document extends DomainObj{
+      static public function getGroup(){
+         return 'hello';
+      }
+    }
+    class Shipping extends Document{
+      
+    }
+    var_dump(User::create());
+    var_dump(Shipping::create());
+5、错误处理，文件放错位置，数据库服务器未初始化，url有变动，xml文件损坏，权限设置得不对，超过了磁盘空间限制，这些问题 经查发生，一个简单的类
+   可能充满了错误处理代码，大量的错误处理代码并不好，麻烦
+   遇到错误停止代码，这种方法简单，但是过于激烈， 因为一个简单的类，就停止整个程序，有些方法可以检测到错误，但是并不知道怎么处理错误
+   不在类中处理错误，直接返回错误标志，错误标志可以是布尔值，或是整数，也可以设置错误字符串，让客户端获取更多的错误信息，
+   一、异常是php自带的Exception类实例化得来的特殊对象，这个特殊对象用来存储和报告错误信息
+       Exception类的构造方法接受两个可选参数，消息字符串和错误代码，这个类提供了有用的方法来分析错误条件，这些方法：
+       getMessage();   获得传递给构造方法的消息字符串
+       getCode();      获得传递给构造方法的错误代码
+       getFile();      获得产生异常的文件
+       getLine();      获得生成异常的行号
+       getPrevious    获得一个嵌套的异常对象
+       getTrace();     获得一个多维数组，这个数组追踪导致异常的方法调用，包含方法，类，文件，参数数据
+       getTraceAsString();   获得getTrace();返回的数据的字符串版本
+       __toString();    返回一个描述异常细节的字符串
+      Exception类返回的错误通知如 getTrace()；特别有用
+      1、抛出异常 
+      
+      使用关键字throw,Exception类的对象来进行抛出，如下：
+      class file{
+         private $file;
+         public function __construct($file){
+             if(!file_exists($file)){
+               throw new Exception("file '$file' does not exist");
+             }
+         }
+      }
+      检测错误， 让其他更合适的代码来响应检测到的错误，所以是抛出错误，处理错误
+      如果调用可能会抛出异常的方法，那么可以把语句放到try子句中，try子句 至少跟一个catch子句才能处理错误，
+      当抛出异常时候，catch子句会被调用，自动将 Exception对象作为参数传入，抛出异常时，会停止执行类方法，控制权到了catch () 子句中
+      2、异常的子类 化
+         理由：1、 扩展异常类的功能    2、定义新的异常类型
+         实际定义多个catch，也只用一个try子句，调用哪个catch取决于抛出异常的类型提示，把通用的异常类型放到最后Exception 放到最后
+         如果把Exception 放到前面，那么后面的就不会被调用
+         也有可能抛出了包含旧异常的新异常
+         如果异常没有被捕获时， 那么会被再次抛出，直到异常被捕获，或不再出现，如果到最后也没有被捕获，那么会发生致命的错误，抛出异常要强制对其处理
+6、继承为类层次内部带来了灵活性，可能调用同样的方法，结果却不一样，但是可能需要类和方法不发生变化 ， 用到final关键字
+      final关键字可以终止类的继承，final类不能有子类，final方法不能被覆写，例如：
+      final class A{
+      }
+      class B extends A{
+      }
+      var_dump(new B());
+      这个时候会报错
+      final方法的final关键字要放到public 、static等 修饰词之前，例如：
+      class A{
+         final public function B(){
+            return 'default';   
+         }
+      }
+      class A1 extends A{
+         public function B(){
+            return 'hello';
+         }
+      }
+      var_dump(new A1()->B());
+      这样就会报错
+      慎重使用final
+7、php内置的3个拦截器，类似于__construct();
+    __get($property);    访问未定义的属性时被调用
+    __set($property,$value);   给未定义的属性赋值时被调用
+    __isset($property);    对未定义的属性调用isset()时被调用 
+    __unset($property);    对未定义的属性调用unset()时被调用
+    __call($method,$arg_array);   调用未定义的方法时被调用
+    注：__get(),__set(), 处理类中未声明的属性
+    当访问未声明的参数时，__get()被调用，带一个  包含访问的属性名的字符串参数
     
-   
+      
    
    
    
