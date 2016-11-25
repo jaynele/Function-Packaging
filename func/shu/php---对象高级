@@ -231,9 +231,273 @@
     __unset($property);    对未定义的属性调用unset()时被调用
     __call($method,$arg_array);   调用未定义的方法时被调用
     注：__get(),__set(), 处理类中未声明的属性
-    当访问未声明的参数时，__get()被调用，带一个  包含访问的属性名的字符串参数
+    当访问未声明的参数时，__get()被调用，带一个  包含访问的属性名的字符串参数,好像带有该值的目标属性存在一样，如下：
+    method_exists('对象'，'方法名');
+    （1）__get();方法
+    class Person{
+      public function __get($property){
+         $method = 'get'.$property;         
+         if(method_exists($this,$method)){
+            return $this->$method();
+         }
+      }
+      public function __getName(){
+         return 'Bob';
+      }
+      public function __getAge(){
+         return 44;
+      }
+    }
+    $objPerson = new Person();
+    var_dump($objPerson->name);
+    访问未定义的属性，__get()这个方法被调用
+    __isset()方法与__get()方法类似，一个未定义的属性调用isset时，__isset()方法被调用，如下：
+    类 实例化为对象时，调用 未定义的属性，并判断属性是否存在，这个时候会调用__isset()方法
+    （2）__isset()方法
+    class Person{
+      public function __get($property){
+         $method = 'get'.$property;
+         if(method_exists($this,$method)){
+            return $this->$method();
+         }
+      }
+      public function __isset($property){
+         $method = 'get'.$property;
+         return method_exists($this,$method);
+      }
+      public function getName(){
+         return 'Bob';
+      }
+      public function getAge(){
+         return 44;
+      }
+    }
+    $objPerson = new Person();
+    var_dump($objPerson->name);
+    if(isset($objPerson->age)){
+      return 'hello';
+    }
+    __isset(),实例化后 可以使用。
+    （3）__set(),
+    class Person{
+      public $_name;
+      public $_age;
+      public function __set($property,$value){
+         $method = 'set'.$property;
+         if(method_exists($method)){
+            return $this->$method($value);
+         }
+      }
+      public function setName($name){
+         $this->_name = $name;
+         if(!is_null($name)){
+            $this->_name = strtoupper($this->_name);
+         }
+      }
+      public function setAge($age){
+         $this->_age = $age;
+      }
+    }
+    $objPerson = new Person();
+    $objPerson->name = 'name11';
+    （4）__unset();
+       class Person{
+         private $_name;
+         public function __unset($property){
+            $method = 'set'.$property;
+            if(method_exists($this,$property)){
+               return $this->$method(null);
+            }
+         }
+         public function setName($name){
+            $this->_name = $name;
+            if(!is_null($name)){
+               $this->_name = strtoupper($this->_name);
+            }
+         }
+       }
+       $objPerson = new Person();
+       if(unset($objPerson->Name)){
+         var_dump('设置成功');
+       }
+    （5）__call();
+        这个方法是这几个中最有用的，也最常用，有两个参数，方法名，和传入这个方法的参数，这些参数以数组的形式放进去
+        这个方法对实现委托也很有 用，委托是一个对象到另外一个对象，被委托的对象替原来的对象处理请求
+        class PersonWriter{
+          public function WriterName(Person $P){
+            return $p->getName();
+          }
+        }
+        class Person{
+            private $writer;
+            public function __construct(PersonWriter $objWriter){
+               $this->writer = $objWriter;
+            }
+            public function __call($WriterName,$args){
+               if(method_exists($this->writer,$WriterName)){
+                  return $this->writer->$WriterName($this);
+               }
+            }
+            public function getName(){
+               return 'Bob';
+            }
+            public function getAge(){
+               return 44;
+            }
+        }
+         $objPerson = new Person(new PersonWriter);
+         var_dump($objPerson->WriterName());
+         通常都是实例化对象后调用，但是一定要 注 意调用的属性名，或者方法名
+      （6）自动委托可以 节省很多时间，但是代码也会变得不太清晰， 不易理解， 不易理清头绪，
+         注：拦截器很有用，但是用的时候一定 要附上文档
+         __destruct()方法，这个方法对工作进行必要的清理工作
+         不论对象何时从内存中删除，都会调用__destruct();当对象用了unset()对其进行销毁了，那么也会调用这个__destruct()方法，如下：
+         class Person{
+            private $name;
+            private $age;
+            private $id;
+            public function __construct($name,$age){
+               $this->name = $name;
+               $this->age = $age;
+            }
+            public function setId($id){
+               $this->id = $id;
+            }
+            public function __destruct(){
+                  var_dump('id有值');
+                 if(!empty($this->id)){
+                     var_dump(''最后已经清理);
+                 }
+            }
+         }
+         $objPerson = new Person('name11',''age11);
+         $objPerson->setId(22);
+         unset($objPerson);
+         __call();__destruct();这些魔法 方法不要轻易相信
+         有个类用destruct,把类的数据写入了数据库，但是一个新手，实例化了一组新对象，并把给经理起的外号与 年龄作为参数传给了构造方法，
+         多次运行脚本，然后数据库写入了乱七八糟的数据，被领导请去喝茶。这种现象就说明魔法方法不要轻易乱用
+      （7）复制对象
+          class copyMe{}
+          $first = new copyMe();
+          $second = $first;
+          php4中，这两个对象是不同 的对象
+          php5之后，这两个对象指向同一个对象
+          在4中，这种现象会有很多bug，在变量复制，调用方法，返回对象时对进行 对象复制，会告诉你是否都是对象，但是不会告诉你 是否指向同一个对象
+          所以， 在php中，对象赋值和对象传递都是通过引用传递的，也就说$first 和$second  指向的是同一个对象 ，这正是我们希望的，但是 我们
+          也需要一个副本，而就不是引用了
+          我们使用clone关键字来赋值一个对象，形成一个对象的副本，例如：
+          class copyMe{}
+          $first = new copyMe();
+          $second = clone $first;
+          这个时候$first 和 $second 指向的就不是一个对象，但是这种复制是采用‘值复制’的方法；如果两个对象的id 属性对应数据库中的同一条数据
+          就是不妥的。
+          所以对象采用clone方法时，我们是可以控制复制什么的，我们可以通过__clone()方法， 双下划线开头的都是php的内置 方法
+          当我们对一个对象使用clone方法时，__clone()方法就会被自动调用
+          注意： __clone()是在复制 得来的对象上进行的，而不是在原始的对象上运行的，如下：
+           class Person{
+               private $name;
+               private $age;
+               private $id;
+               public function __construct($name,$age){
+                  $this->name = $name;
+                  $this->age = $age;
+               }
+               public function setId($id){
+                  $this->id = $id;
+               }
+               public function __clone(){
+                  $this->id = 0;
+               }
+           }
+           $objPerson = new Person('name11','age11');
+           $objPerson->setId(22);
+           $objPerson1 = clone($objPerson);
+           var_dump($objPerson.'<br />');
+           var_dump($objPerson1);
+          这样对象的复制就是有限制的，对复制 后的对象进行部分再次赋值
+          如果 person对象有一个对象类型的属性Account，这个Account对象有个$balance属性。
+          复制的时候， 这个属性可以 复制，但是我们不希望原来的Person对象和复制的Person引用同一个账户
+          class Account{
+            public $balance;
+            public function __construct($balance){
+               $this->balance = $balance;
+            }
+          }
+          class Person{
+            private $name;
+            private $age;
+            private $id;
+            public $Account;
+            public function __construct($name,$age,Account $Account){
+               $this->name = $name;
+               $this->age = $age;
+               $this->Account = $Account;
+            }
+            public function setId($id){
+               $this->id = $id;
+            }
+            public function __clone(){
+               $this->id = 0;
+            }
+          }
+          $objPerson = new Person('name222','age222',new Account(200));
+          $objPerson->setId(222);
+          $objPerson1 = clone $objPerson;
+          $objPerson->Account->balance += 10;
+          var_dump($objPerson->Account->balance);
+          结果是两个对象的账户引用的 是同一个，然而我们并不想这样， 原始对象与复制对象引用的都是同一个Account 对象，所以账户都加钱了
+          我们不希望 对象属性被复制后共享
+          我们可以复制指向的对象
+          class Person{
+            private $name;
+            private $age;
+            private $id;
+            public $Account;
+            public function __construct($name,$age,Account $Account){
+               $this->name = $name;
+               $this->age = $age;
+               $this->Account = $Account;
+            }
+            public function setId($id){
+               $this->id = $id;
+            }
+            public function __clone(){
+               $this->id = 0;
+               $this->Account = clone $this->Account;
+            }
+          }
+          $objPerson = new Person('name11','age11',new Account(200));
+          $objPerson->setId(11);
+          $objPerson1 = clone $objPerson;
+          $objPerson->Account->Blance += 10;
+          var_dump($objPerson);
+          echo '<br />';
+          var_dump($objPerson1);
+           复制之后是两个对象，给一个对象钱，另一个对象的钱不能增加
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
       
+   
+   
+   
+   
+   
+   
+   
    
    
    
