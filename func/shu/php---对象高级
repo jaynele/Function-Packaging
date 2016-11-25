@@ -474,9 +474,96 @@
           echo '<br />';
           var_dump($objPerson1);
            复制之后是两个对象，给一个对象钱，另一个对象的钱不能增加
-    
-    
-    
+        (8)定义对象的字符串值
+          如果你打印一个对象，就会把一个对象解析成字符串 值来输出
+          class StringThing{
+          }
+          $objStr = new StringThing();
+          var_dump($objStr);
+          当把$objStr传给一个echo 或print时候，就会有报错的。
+          通过实现__toString()方法，可以限制字符串输出的格式，__toString()方法应当返回一个字符串值，            
+          当把对象传给echo 或print时候，会自动调用__toString()方法，并用这个方法的返回值 替代默认返回的值，如下：
+          class Person{
+            public function getName(){
+               return 'Bob';
+            }
+            public function getAge(){
+               return 44;
+            }
+            public function __toString(){
+               $desc = $this->getName();
+               $desc .= '(age:'.$this->getAge().')';
+               return $desc;
+            }
+          }
+          $objPerson = new Person();
+          echo $objPerson;
+          这里 echo 和print的应该是一个字符串的，但是这里要 echo print一个对象，  所 以这个时候会调用__toString()方法
+          对于错误和日志，这个方法很有用，也可用来专门设计 传递信息的类，例如：Exception类可以把 异常信息的总结信息写到__toString()方法中
+      （9）虽然匿名函数不是严格意义上的面向对象的特性，但是还是很有用的，因为可能在使用回调的面向对象的应用上使用到，匿名函数----回调
+          运行各种回调， 例如：
+          class Product{
+            private $name;
+            private $price;
+            public function __construct($name,$price){
+               $this->name = $name;
+               $this->price = $price;
+            }
+            public function getName(){
+               return $this->name;
+            }
+            public function getPrice(){
+               return $this->price;
+            }
+          }
+         class PrincessSale{
+            private $callbacks;
+            public function registerCallback($callback){
+               if(!is_callable($callback)){
+                  throw new Exception('参数  can not callable');
+               }
+               $this->callbacks[] = $callback;
+            }
+            public function save($objproduct){
+               echo $objProduct->getName();
+               foreach($this->callbacks as $callback){
+                  call_user_func($callback,$objproduct);
+               }
+            }
+         }
+         利用回调可以在运行时将与代码核心组件没有关系的功能插入到组件中，赋予其他人，在你不知道的上下文中下扩展你的代码
+         $logger = create_function('$objProduct','echo 匿名函数回调'.$objProduct->getName());
+         $objPrincess = new PrincessSale();
+         $objPrincess->registerCallback($logger);
+         $objPrincess->save(new Product('name11',44));
+         $objPrincess->save(new Product('name22',88));
+         create_function();这个方法很难看，要把执行体放到一个字符串中，如果 回调 变得庞大，那么 这样就不合适了，
+         一种更优雅的创建匿名函数的方法，
+         $logger = function($product){
+            echo $product->getName();
+         };
+         因为这个一个内联语句，所以末尾的分号不可以省略，回调一定要是匿名的，可以使用函数作为回调
+         也可以用方法来返回 一个匿名函数
+         综述：create_function()、写个内联语句、通过 方法返回一个匿名函数。这三个方法都是有用的
+    （10）通过方法返回一个匿名函数，这样的结构还可以做很多事情，比如利用闭包  
+         use 可以让匿名函数追踪来自父作用域的变量
+         class Tlerzer{
+            static public function WarnAcount($arm){
+               $count = 0;
+               return function($objProduct) use($arm,&$count){
+                  $count += $objProduct->price;
+                  if($count >= $arm){
+                     echo '价格超过目标金额了';
+                  }
+               }
+            }
+         }
+         可以用匿名函数的引用而不是值，$count前面加了&符号
+       总结：匿名函数，回调，闭包要再次多看看
+
+         
+         
+         
     
     
     
