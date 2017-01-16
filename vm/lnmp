@@ -39,7 +39,7 @@ echo aa > aa .txt
 echo bb > bb .txt 
 cat aa.txt bb.txt > cc.txt      cat  文件名1 >  文件名2   把文件1的内容写入到文件2中
 more cc.txt          查看文件
-grep adm /etc/passwd  //把/etc/passwd目录下含adm内容的行都打印出来
+grep adm /etc/passwd  //把/etc/passwd目录下含adm内容的行都打印出来   把目录下这个文件中的含有adm内容的一行东西打印出来
 //bin 普通
 //sbin 超管
 //boot 启动目录
@@ -97,7 +97,65 @@ yum update
 //清缓存  
 yum clean
 
+Linux创建ftp用户
+1. 安装vsftpd服务：
+在shell下运行yum install vsftpd，即可安装成功；
 
+2. 修改vsftpd的配置：
+在/etc/vsftpd/下找到vsftpd.conf文件，修改默认配置，包括监听地址和端口，是否打开tcp、psav模式等等；配置比较简单，具体看我的文章中的vsftpd配置手册
+
+3.启动vsftpd服务：
+运行service vsftpd start即可，或者运行/etc/init.d/vsftpd start
+
+4.为ftp建立用户和登录目录
+这个和linux建用户帐号是一样的
+
+先用“useradd -d 目录名 用户名”建立一个到ftp目录的用户帐号，然后在用passwd设置密码；
+
+然后你就可以用你新建的用户名和帐号登录这个ftp了，ftp的登录方式是
+ftp 主机名；
+输入用户名；
+输入密码。
+当然你用ftp工具也可以哦。
+
+开启FTP 
+[root@huiyi ~]# service vsftpd start
+
+Starting vsftpd for vsftpd: [ OK ]
+
+关闭FTP 
+[root@huiyi ~]# service vsftpd stop
+
+Shutting down vsftpd: [ OK ]
+
+【1】FTP自动登录并批量下载
+#!/bin/bash 
+ftp -n<<
+
+user guest 123456 
+binary 
+cd /home/data 
+lcd /home/databackup 
+prompt 
+mget * 
+close 
+bye 
+!
+
+【2】FTP自动登录并上传文件
+#!/bin/bash
+ftp -n<<
+
+user guest 123456 
+binary 
+hash
+cd /home/data 
+lcd /home/databackup 
+prompt 
+mput * 
+close
+bye 
+！
 
 //yum 安装 gcc 编译环境,为编译lnmp准备
 yum install gcc automake autoconf libtool gcc-c++
