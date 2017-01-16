@@ -53,16 +53,17 @@ grep adm /etc/passwd  //把/etc/passwd目录下含adm内容的行都打印出来
 //usr 系统资源目录
 man -f 
 ls --help 
-tar -zcvf ..tar.gz  源文件
-tar -zxvf ..tar.gz 
-tar -jcvf ..tar.bz2 源文件
-tar -jxvf ..tar.bz2
+tar -zcvf ..tar.gz  源文件  压缩文件   tar -zcvf  文件名
+tar -zxvf ..tar.gz          解压文件     tar -zxvf  文件名
+tar -jcvf ..tar.bz2 源文件   压缩文件  tar -jcvf  文件名
+tar -jxvf ..tar.bz2         解压文件  tar -jxvf 文件名
 find / -name httpd.conf , find 目录 按名字查 文件名
 whoami 
 su - root 
-free -m -s 3 显示内存状态
-top 资源管理器
-ps -aux 
+free -m -s 3 显示内存状态    查看内存mem   used      free
+top 资源管理器   查看内存     查看cache    used   free
+ps -aux | grep xxx     如果直接用ps命令，会显示所有进程的状态，通常结合grep命令查看某进程的状态。
+ps -aux     R 运行 runnable (on run queue)  S 中断 sleeping   T 停止 traced or stopped   USER: 行程拥有者   PID: pid
 mount /dev/cdrom  /mnt 挂载到/mnt下
 cp /mnt/package/thing  /use/local/.
 umount /mnt   or umount /cdrom
