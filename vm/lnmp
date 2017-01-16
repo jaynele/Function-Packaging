@@ -61,10 +61,12 @@ find / -name httpd.conf , find 目录 按名字查 文件名
 whoami 
 su - root 
 free -m -s 3 显示内存状态    查看内存mem   used      free
-top 资源管理器   查看内存     查看cache    used   free
+top 资源管理器    查看内存     查看cache    used   free
 ps -aux | grep xxx     如果直接用ps命令，会显示所有进程的状态，通常结合grep命令查看某进程的状态。
-ps -aux     R 运行 runnable (on run queue)  S 中断 sleeping   T 停止 traced or stopped   USER: 行程拥有者   PID: pid
-mount /dev/cdrom  /mnt 挂载到/mnt下
+ps -aux     R 运行 runnable (on run queue)  S 中断 sleeping   T 停止 traced or stopped   USER: 行程拥有者   PID: 
+
+pid挂载前看下硬盘的分区情况  fdisk -l
+mount /dev/cdrom  /mnt 挂载到/mnt下   
 cp /mnt/package/thing  /use/local/.
 umount /mnt   or umount /cdrom
 //命令模式i,a,o,s,dd,ddp编辑模式esc,尾行模式wq!
