@@ -33,12 +33,12 @@ ln -s 1 2    给文件1创建软连接文件2
 more +20 1    从第二十行查看文件1        q退出more操作   空格翻看一屏    ctrl+b返回上一屏     
 less  1     同more
 head -3 filename       head -n 5 filename  查看文件filename前5行，-n为查看文件的行数，这个用的较多
-tail -3 filename 
-cat filename1 filename2
+tail -3 filename       查看文件后三行 
+cat filename1 filename2     cat 文件名  打印输出文件内容   
 echo aa > aa .txt
 echo bb > bb .txt 
-cat aa.txt bb.txt > cc.txt 
-more cc.txt
+cat aa.txt bb.txt > cc.txt      cat  文件名1 >  文件名2   把文件1的内容写入到文件2中
+more cc.txt          查看文件
 grep adm /etc/passwd  //把/etc/passwd目录下含adm内容的行都打印出来
 //bin 普通
 //sbin 超管
