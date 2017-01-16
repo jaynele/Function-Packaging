@@ -4,10 +4,11 @@
 //自定义布局,boot200,swam1000,home2000,/
 //base server 
 //命令操作
-shutdown
-poweroff
-reboot
-root
+shutdown -r now  重启
+shutdown -h now  关机
+poweroff   关机
+reboot   重启
+halt  关机
 ifconfig
 ifup eth0
 //get ip ,and use xshell5
@@ -18,20 +19,20 @@ pwd
 cd 
 ls 
 ll 
-//-rwxrwxrwx
-//-文件 l 软连接 d 目录
+ll 详细信息//-rwxrwxrwx
+详细信息中//-文件 l 软连接 d 目录
 //读写执行
-mkdir -p 
-//移动 改名
-mv 
+mkdir -p   迭代建立目录
+//移动 改名   
+mv  参数1  参数2   //如果第二个参数是目录，剪切。如果第二个参数是文件，改名
 //复制
-cp .. .. -r 
-touch 
-rm -rf ..
-ln -s .. ..
-more ..
-less 
-head -3 filename 
+cp 1 2 -r   递归的复制某目录文件1到目录文件2 
+touch 1     新建一份文件1
+rm -rf 1     删除文件1或者目录1
+ln -s 1 2    给文件1创建软连接文件2
+more +20 1    从第二十行查看文件1        q退出more操作   空格翻看一屏    ctrl+b返回上一屏     
+less  1     同more
+head -3 filename       head -n 5 filename  查看文件filename前5行，-n为查看文件的行数，这个用的较多
 tail -3 filename 
 cat filename1 filename2
 echo aa > aa .txt
