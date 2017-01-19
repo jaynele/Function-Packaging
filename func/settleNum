@@ -1,0 +1,4 @@
+保留两位小数
+sprintf(" %1\$.2f",$arryNem)
+千分位符号
+preg_replace('/(?<=[0-9])(?=(?:[0-9]{3})+(?![0-9]))/', ',', $arrFinancial[$k]['arryNem'])
