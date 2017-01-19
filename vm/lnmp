@@ -320,7 +320,7 @@ pkill -9 php
 				Mysql -S /path/to/mysql.sock
 				14.4 mysql 修改密码
 				Mysql 用户的密码,存储在一个系统库里的---mysql
-//编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好
+//编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好     这个路径下找到mysql，wget复制下来的地址
 //mv src/mysql usr/local/mysql
 //cd usr/local/mysql
 //more Install-Binary 
