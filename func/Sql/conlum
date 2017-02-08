@@ -1,5 +1,24 @@
 1、列的去重，distinct
 2、列的去重后数的统计count(distinct name)
+   例
+   　table
+  id name
+  1 a
+  2 b
+  3 c
+  4 c
+  5 b
+  
+  
+  
+   select *, count(distinct name) from table group by name
+
+　　结果:
+
+　　id name count(distinct name)
+  1 a 1
+  2 b 1
+  3 c 1
 3、mysqli 扩展
   支持面向对象，支持预处理，支持事务，运行快，安全
 4、mysqli 安装配置
