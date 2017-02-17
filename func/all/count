@@ -1,0 +1,76 @@
+/**
+  * 两个高精度数比较
+  * 
+  * @access global
+  * @param float $left
+  * @param float $right
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return int $left==$right 返回 0 | $left<$right 返回 -1 | $left>$right 返回 1
+  */
+var_dump(bccomp($left=4.45, $right=5.54, 2));
+// -1
+  
+ /**
+  * 两个高精度数相加
+  * 
+  * @access global
+  * @param float $left
+  * @param float $right
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return string 
+  */
+var_dump(bcadd($left=1.0321456, $right=0.0243456, 2));
+//1.04
+ 
+  /**
+  * 两个高精度数相减
+  * 
+  * @access global
+  * @param float $left
+  * @param float $right
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return string 
+  */
+var_dump(bcsub($left=1.0321456, $right=3.0123456, 2));
+//-1.98
+  
+ /**
+  * 两个高精度数相除
+  * 
+  * @access global
+  * @param float $left
+  * @param float $right
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return string 
+  */
+var_dump(bcdiv($left=6, $right=5, 2));
+//1.20
+ 
+ /**
+  * 两个高精度数相乘
+  * 
+  * @access global
+  * @param float $left
+  * @param float $right
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return string 
+  */
+var_dump(bcmul($left=3.1415926, $right=2.4569874566, 2));
+//7.71
+ 
+ /**
+  * 设置bc函数的小数点位数
+  * 
+  * @access global
+  * @param int $scale 精确到的小数点位数
+  * 
+  * @return void 
+  */ 
+bcscale(3);
+var_dump(bcdiv('105', '6.55957')); 
+// 16.007
