@@ -93,7 +93,7 @@ php配置
 ////编译php
 //php依赖的库很多 yum install gd zlib openssl openssl-devel libxml2 libxml2-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libmcrypt libmcrypt-devel
 //官网大陆镜像wget 解压
-// ./configure --prefix=/usr/local/php \
+// ./configure --prefix=/usr/local/php --with-apxs2=/usr/local/apache2/bin/apxs\
 --with-gd \
 --enable-gd-native-ttf \
 --enable-gd-jis-conv \
