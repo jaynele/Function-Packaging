@@ -60,7 +60,7 @@ http://sourceforge.net/projects/pcre/files/latest/download 下载pcre-8.31.zip
 •启动Apache：/usr/local/apache2/bin/apachectl start
 •停止Apache：/usr/local/apache2/bin/apachectl stop
 •重启Apache：/usr/local/apache2/bin/apachectl restart
-修改host文件
+修改host文件  配置虚拟目录
 网站放在/usr/local/apache2/htdocs目录下
 在IE中通过http://localhost:80，如果看到页面中显示“It works!”字样，则代表Apache验证通过。如果网站的index后缀是PHP格式的，则要修改httpd.conf配置文件（/usr/local/apache2/conf），在DirectoryIndex增加 index.php。
 #
