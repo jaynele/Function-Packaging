@@ -271,8 +271,7 @@ pkill -9 php
 
 
 
-
-
+查看linux是32位还是64位   uname -a
 //编译mysql  http://mirrors.sohu.com/  wget 解压 无configure 已编译好
 //mv src/mysql usr/local/mysql
 //cd usr/local/mysql
