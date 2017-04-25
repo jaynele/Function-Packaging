@@ -1,0 +1,10 @@
+bcadd — 将两个高精度数字相加 
+bccomp — 比较两个高精度数字，返回-1, 0, 1 
+bcdiv — 将两个高精度数字相除 
+bcmod — 求高精度数字余数 
+bcmul — 将两个高精度数字相乘 
+bcpow — 求高精度数字乘方 
+bcpowmod — 求高精度数字乘方求模，数论里非常常用 
+bcscale — 配置默认小数点位数，相当于就是Linux bc中的”scale=” 
+bcsqrt — 求高精度数字平方根 
+bcsub — 将两个高精度数字相减
