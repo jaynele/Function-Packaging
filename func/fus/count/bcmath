@@ -8,3 +8,14 @@ bcpowmod — 求高精度数字乘方求模，数论里非常常用
 bcscale — 配置默认小数点位数，相当于就是Linux bc中的”scale=” 
 bcsqrt — 求高精度数字平方根 
 bcsub — 将两个高精度数字相减
+
+bcmath的安装
+bcmath这个扩展在php的压缩包中都是有的，需要重新编译一下才能够支持；
+cd   php-5.2.7/ext/bcmath
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config 
+make && make install (make 可以得到so路径)
+so路径拷贝到  extension路径
+vim php.ini 
+extension=bcmath.so
+重启apach
