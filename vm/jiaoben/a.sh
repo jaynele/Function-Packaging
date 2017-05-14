@@ -112,6 +112,27 @@ then
 else 
  echo ok run 
 fi
-  
+(1)for循环控制结构
+shell  脚本除了第一句，其余可以#来注释
+vim j.sh
+#!/bin/bash
+for name in lili meimei
+do
+   echo $name
+done
 
-
+str=/usr/local/src
+for name in `ls $str`
+do
+   if [ -e $str/$name ]
+   then
+      echo $name
+   fi
+done
+(1)定时任务
+输命令
+crontab -e
+编辑
+分时日月周
+02 16 * * * date >> /usr/local/src/test.txt
+成功
