@@ -136,3 +136,13 @@ crontab -e
 分时日月周
 02 16 * * * date >> /usr/local/src/test.txt
 成功
+(2)垃圾桶
+/dev/null
+(1)数据库定期备份
+crontab 定时任务
+mysqldump 数据导出
+tar 压缩
+按日期创建文件
+1、mysql/bin/mysqldump   mysqldump 可执行文件
+root 用户来操作
+mysqldump -uroot -p123456 -B test > /data/test.sql
