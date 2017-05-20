@@ -21,8 +21,12 @@ sql优化技巧：明确哪些是需要进行优化的，mysql日志，查看是
 set global log_queries_not_using_indexs = on;
 mysqldumpslow工具
 适合：查询次数多
-
-索引优化技巧
-
+count  count(*),count('id')结果不一样，count(id)不计算null内容
+max，max的字段加索引提高查询速度  
+索引优化技巧：查询次数多，离散度高通过count()大的离散度更高
 （2）数据表结构
-
+int比varchar好
+尽量用not null
+少用text
+INET_ATON  ip转int
+INET_NTOA  ip转字符串
