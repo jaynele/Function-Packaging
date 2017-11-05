@@ -248,6 +248,15 @@ vim conf/nginx.conf
 location ~ \.php$ 
 /usr/local/nginx/html$fast
 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+解决图片nginx加载不出来的问题
+
+location ~* ^.+\.(jpg|jpeg|gif|png|bmp)$ {
+access_log off;
+root '此处为您的网站路径'; 
+expires 30d;
+break;
+}
+
 让 nginx 的最新配置文件生效
 pkill -9 nginx 
 # ./sbin/nginx -s reload
@@ -269,6 +278,7 @@ listen.allowed_clients = 127.0.0.1
 pkill -9 php 
 ./sbin/php-fpm 
 再次请求 xx.php,看到如下类似效果,即整合成功
+
 
 
 
