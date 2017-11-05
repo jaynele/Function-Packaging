@@ -247,6 +247,7 @@ vim conf/nginx.conf
 :set nu 看他的行号
 location ~ \.php$ 
 /usr/local/nginx/html$fast
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 让 nginx 的最新配置文件生效
 pkill -9 nginx 
 # ./sbin/nginx -s reload
