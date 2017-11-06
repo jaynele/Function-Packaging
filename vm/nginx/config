@@ -1,0 +1,218 @@
+#使用的用户和组
+#user  nobody;
+#指定工作衍生进程数(一般等于CPU的总核数或总核数的两倍)
+worker_processes  4;
+#指定错误日志存放的路径，错误日志的记录级别可为debug，info，notice，warn，error，crit
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#指定pid文件存放的路径
+#pid        logs/nginx.pid;
+
+#指定文件描述符的数量
+#worker_rlimit_nofile 51200;
+
+events {
+    #使用的I/O模型,Linux系统推荐使用epoll模型，FreeBSD推荐使用kqueue模型
+    #在我的Mac OSX 11系统中报错 invalid event type "kueue"
+    #use kueue; 
+    #允许连接数
+    worker_connections  1024;
+}
+
+
+http {
+    #MIME文件类型
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #设置使用的字符集，如果一个网站有多种字符集，请不要随便设置，应让程序员在HTML代码中通过meta标签进行设置
+    #charset gb2312;
+
+
+    #自定义一个日志格式main(也可以写在server各自的区间)
+    #log_format name format [format ...] 
+    #log_format 格式名称(nginx提供了一个默认的combined日志格式,name名称不能重复) 格式规则
+    #由于nginx是反向代理服务器，$remote_addr拿到的是代理服务器的IP
+    #$http_x_forwarded_for才是用户的真实IP
+    #$remote_user记录客户端用户名称
+    #$time_local记录访问时间以及时区
+    #$request记录访问的URL以及协议
+    #$status记录请求的状态，例如302,404等
+    #$body_bytes_sent记录发送给客户端的文件大小
+    #$http_referer记录访问来源
+    #$http_user_agent记录客户端浏览器相关的信息
+    #
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #访问日志
+    #access_log path [format [buffer=size | off]]
+    #access_log 路径 [格式 [缓存区大小｜关闭日志]]
+    #关闭日志 access_log off;
+    #使用默认的combined格式的日志access_log access.log
+    #或access_log access.log combined;
+    #自定义格式，并设置缓冲大小(到达32k的时候才会从内存中写入到磁盘文件)
+    #access_log access.log main buffer=32k;
+    #路径中支持变量：如果是$server_name/access.log，server_name指令设置的是
+    #localhost，则路径为localhost/access.log
+    #路径中含有变量，将导致三个问题
+    #(1)user指令中定义的用户组要对目录文件有创建权限
+    #(2)buffer失效，不再使用缓冲
+    #(3)每写入一条记录，都要打开日志文件，然后关闭，开关，关闭......效率低下
+    #为提高包含变量的日志文件路径的存取性能，需要使用open_log_file_cache指令
+    #默认情况下open_log_file_cache＝off;
+    #open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time] | off
+    #停留在内存中的最大文件描述符数量 
+    #文件描述符过期时间,如果在过期时间内未使用，则从缓冲中移除,默认10s
+    #最少使用次数，如果在过期时间内，超过最少使用的次数，就续期，默认次数1
+    #多久检查一次日志文件，默认60秒
+    #关闭缓冲
+    #示例：open_log_file_cache max=1000 20s min_uses=3 valid=2m
+    #access_log  logs/access.log  main;
+
+    #server_names_hash_bucket_size 128;
+    #client_header_buffer_size 32k;
+    #large_client_header_buffers 4 32k;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+
+    #fastcgi_connect_timeout 300;
+    #fastcgi_send_timeout 300;
+    #fastcgi_read_timeout 300;
+    #fastcgi_buffer_size 61k;
+    #fastcgi_buffers 4 64k;
+    #fastcgi_busy_buffers_size 128k;
+    #fastcgi_temp_file_write_size 128k;
+
+    #开启gzip压缩
+    #gzip  on;
+    #gzip_min_length 1k;
+    #gzip_buffers 4 16k;
+    #gzip_http_version 1.1;
+    #gzip_comp_level 2;
+    #gzip_types text/plain application/x-javascript text/css application/xml;
+    #gzip_vary on;
+
+    #limit_zone crawler $binary_remote_addr 10m;
+
+    #一个server可以理解成一个网站,一台服务器可以运行多个站点
+    #第一个站点
+    server {
+
+        #nginx虚拟主机支持多种配置，基于端口、基于域名(最常用)、基于IP
+        #如果基于端口的配置无法匹配或者匹配到了多个server，则搜索基于域名的配置
+        #搜索顺序，按照写法的先后顺序，依此类推
+
+        #基于端口和基于IP的也可以配合使用
+        #例如80;127.0.0.1;127.0.0.1:80;127.0.0.1:81;127.0.0.2.80
+        #别跟我说一个网卡只可以拥有一个IP哦,提示“ifconfig”命令
+
+        #基于端口，其实默认情况下，也是基于127.0.0.1:80;
+        listen       80;
+
+        #基于域名,域名的书写支持通配符，如*.firstdomain.com;
+        #server_name www.firstdomain.com firstdomain.com;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            #目录浏览,开启nginx目录浏览功能
+            #文件大小从KB开始显示
+            #显示文件修改时间为服务器本地时间
+            autoindex on; 
+            autoindex_exact_size off; 
+            autoindex_localtime on; 
+
+            #网页文件存放的根目录
+            root   html;
+            #目录内的默认打开文件,如果没有匹配到index.html,则搜索index.htm,依次类推
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        #将服务器错误页面重定向到静态页面/50x.html
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        #代码PHP脚本到Apache在127.0.0.1:80上监听
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        #将PHP脚本传递给FastCGI服务器，侦听127.0.0.1:9000
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
+            #expires指令设置浏览器缓存过期时间
+            #可以在http、server、location三个作用域中设置
+            #缓存图片或视频30天
+            expires 30d;
+        }
+
+        location ~ .*\.(js|css)?$ {
+            #缓存js/css 1小时
+            expires 1h;
+        }
+
+        #拒绝访问.htaccess文件，如果Apache的文档根目录与nginx文件一致
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+
+    #另一个虚拟主机使用基于IP，名称和端口的配置
+    #第二个站点，用于查看nginx反向代理服务器的运行状态
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    #HTTPS服务器
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}
